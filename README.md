@@ -3,3 +3,6 @@
 
 ## Programming
 - [JAVA](Programming/JAVA/README.md) — 주차별 자바 복습 (1~8주차)
+
+## Database
+- [데이터베이스 (SQL)](Database/README.md) — 주차별 데이터베이스 복습 (1~8주차)

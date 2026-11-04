@@ -1,5 +1,7 @@
 # 8주차 · 자바 기본 패키지 (Object, Wrapper, String)
 
+> 헷갈렸던 부분과 해결 과정: [week08-deep-dive.md](week08-deep-dive.md)
+
 > 교재 9장 · 시험 강조: **Object(equals와 ==, equals 오버라이딩)**, **Wrapper 클래스**
 
 ## 1. 클래스 · 패키지 · 모듈

@@ -1,5 +1,7 @@
 # 5주차 · 메서드, 메모리, 패키지, static, 예외 처리
 
+> 헷갈렸던 부분과 해결 과정: [week05-deep-dive.md](week05-deep-dive.md)
+
 > 교재 5장
 
 ## 1. 오버로딩 vs 오버라이딩

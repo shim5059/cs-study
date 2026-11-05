@@ -4,12 +4,12 @@
 
 ## Programming
 
-- [JAVA](Programming/JAVA) — 주차별 자바 복습 (1~8주차)
+- [JAVA](Programming/JAVA) — 자바 복습 
 
 ## Database
 
-- [데이터베이스 (SQL)](Database) — 주차별 데이터베이스 복습 (1~8주차)
+- [데이터베이스 (SQL)](Database) — 데이터베이스 복습 
 
 ## Network
 
-- [컴퓨터 통신 (Network)](Network) — 주차별 네트워크 복습 (1~7주차)
+- [컴퓨터 통신 (Network)](Network) — 네트워크 복습 

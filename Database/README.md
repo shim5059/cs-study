@@ -22,4 +22,4 @@
 | [6주차](week06.md) | MySQL Workbench 실습: DB·테이블 만들고 데이터 넣기 (시험 제외) | 7장 실습 | [deep-dive](week06-deep-dive.md) (기록 없음) |
 | — | 중간고사 (1~6장, 8장 + 9장 정규화 BCNF까지 / 7장 제외) · 서술형 10문제: 개념 5 + 관계 대수식 5 | | |
 | [7주차](week07.md) | SQL: CREATE·ALTER·DROP, SELECT·WHERE·GROUP BY·HAVING, 조인, 부속 질의문, INSERT·UPDATE·DELETE, 뷰 | 7장 | [deep-dive](week07-deep-dive.md) |
-| [8주차](week08.md) | 트랜잭션(ACID), 장애와 회복(redo·undo), 병행 제어·로킹·교착 상태, 파이썬 연동 | 10장 | [deep-dive](week08-deep-dive.md) (복습 전) |
+| [8주차](week08.md) | 트랜잭션(ACID), 장애와 회복(redo·undo), 병행 제어·로킹·교착 상태, 파이썬 연동 | 10장 | [deep-dive](week08-deep-dive.md) |

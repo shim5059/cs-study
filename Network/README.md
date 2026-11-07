@@ -6,9 +6,8 @@
 - 실습 환경: Wireshark, Cisco Packet Tracer, Windows PowerShell / CMD
 
 각 주차는 두 파일로 나뉜다.
-
-- `weekNN.md` : 개념 요약
-- `weekNN-deep-dive.md` : 실제로 틀렸던 것 → 처음 생각 → 원리 → 깨달음
+- `weekNN.md`: 개념 요약
+- `weekNN-deep-dive.md`: 실제로 틀렸던 것 → 처음 생각 → 원리 → 깨달음
 
 ## 주차별 목차
 
@@ -20,5 +19,5 @@
 | [4주차](week04.md) | 웹 캐시(ETag·304), HTTPS/TLS(인증서·DH·SNI), HTTP/1.1→2→3(QUIC), 이메일 | 2장 | [deep-dive](week04-deep-dive.md) |
 | [5주차](week05.md) | 전송 계층, 포트 범위, 다중화/역다중화, 5-튜플, UDP 헤더·체크섬, TCP vs UDP | 3장 | [deep-dive](week05-deep-dive.md) |
 | [6주차](week06.md) | TCP 헤더, 3-way/4-way 핸드셰이크, Seq/ACK·재전송, 흐름 제어(rwnd)·혼잡 제어(cwnd) | 3장 | [deep-dive](week06-deep-dive.md) |
-| — | 중간고사 (1~3장) | | |
-| [7주차](week07.md) | 네트워크 계층(포워딩/라우팅, TTL, ICMP), 서브넷 계산·CIDR·VLSM, ARP, 공인/사설 IP·NAT | 4장 | [deep-dive](week07-deep-dive.md) |
+| — | 중간고사 (1~3장, 서술형: OSI·TCP/IP 계층과 PDU, TCP 연결·전송 과정, UDP 특징, HTTP 버전별 차이) | | |
+| [7주차](week07.md) | 네트워크 계층(포워딩/라우팅), IPv4 헤더·TTL·ICMP, MTU·단편화, 서브넷 계산·CIDR·VLSM, LPM, ARP·DHCP·NAT | 4장 | [deep-dive](week07-deep-dive.md) |

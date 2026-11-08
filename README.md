@@ -5,7 +5,7 @@
 ## Programming
 
 - [JAVA](Programming/JAVA) — 자바 복습 
-- [PYTHON](Programming/PYTHON) — 파이썬 학습 (프로그래밍기능사 실기 대비)
+- [PYTHON](Programming/PYTHON) — 파이썬 학습
 
 ## Database
 

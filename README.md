@@ -5,6 +5,7 @@
 ## Programming
 
 - [JAVA](Programming/JAVA) — 자바 복습 
+- [PYTHON](Programming/PYTHON) — 파이썬 학습 (프로그래밍기능사 실기 대비)
 
 ## Database
 
@@ -16,4 +17,9 @@
 
 ## Data Structure
 
+- [이진 트리 (Python)](Programming/PYTHON/06-tree-traversal.md) — Node 클래스로 트리 만들기
+
 ## Algorithm
+
+- [재귀 (Python)](Programming/PYTHON/03-function-recursion.md) — 호출 순서, 반환값, print 위치
+- [트리 순회 (Python)](Programming/PYTHON/06-tree-traversal.md) — 전위·중위·후위

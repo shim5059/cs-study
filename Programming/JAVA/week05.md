@@ -11,6 +11,21 @@
 | 뜻 | 같은 이름, **매개변수가 다른** 메서드 여러 개 | 부모 메서드를 자식이 **고쳐 씀** (교체) |
 | 위치 | 같은 클래스 | 부모-자식 |
 | 조건 | 매개변수 개수·타입이 달라야 함 | 이름·매개변수·반환형 같음, 접근 범위를 **좁히면 안 됨** |
+| 어느 걸 부를지 | **컴파일 때 인자 타입**으로 결정 | **실행 때 실제 객체**로 결정 |
+
+```java
+class O {
+    int add(int a, int b) { return a + b; }
+    double add(double a, double b) { return a + b + 0.5; }
+    String add(String a, int b) { return a + b; }
+}
+O o = new O();
+o.add(1, 2);       // 3
+o.add(1.0, 2.0);   // 3.5
+o.add("x", 3);     // x3
+o.add(1, 2.0);     // 3.5  (int, double에 딱 맞는 게 없음 → 1이 1.0으로 바뀌어 double 버전)
+```
+- 반환형만 다른 것은 오버로딩이 아님 (컴파일 에러)
 
 ## 2. 매개변수 전달
 - **기본형** 전달 → 값 복사 → 메서드 안에서 바꿔도 원본 그대로
@@ -100,3 +115,67 @@ System.out.println("계속 실행");  // 잡았으면 프로그램은 안 죽음
 ```
 - 예외가 없으면 `catch`는 실행 안 됨
 - **try-with-resources** (자바 7+): `try (자원 선언) { }` → 자원을 자동으로 닫음
+
+### 실행 순서 (기능사 실기 대비)
+
+| 상황 | 순서 |
+|---|---|
+| 예외 안 남 | try **전부** → catch 건너뜀 → finally → 다음 코드 |
+| 예외 남 | try에서 **예외 난 줄까지** → 맞는 catch **하나** → finally → 다음 코드 |
+
+```java
+try {
+    System.out.print("1 ");
+    int x = 10 / 0;              // 예외 → 아래 줄 건너뜀
+    System.out.print("2 ");
+} catch (ArithmeticException e) {
+    System.out.print("3 ");
+} finally {
+    System.out.print("4 ");
+}
+System.out.println("5");
+// 1 3 4 5   (10 / 2처럼 예외가 없으면 1 2 4 5)
+```
+
+### catch가 여러 개면 위에서부터 첫 번째 맞는 것 하나만
+```java
+int[] a = new int[2];               // 0번, 1번 칸만 있음
+try {
+    System.out.print("A");
+    a[2] = 5;                       // 없는 칸 → ArrayIndexOutOfBoundsException
+    System.out.print("B");
+} catch (ArithmeticException e) {   // 종류가 다름 → 통과
+    System.out.print("C");
+} catch (Exception e) {             // 모든 예외의 부모 → 잡힘
+    System.out.print("D");
+} finally {
+    System.out.print("E");
+}
+System.out.print("F");
+// ADEF
+```
+- `Exception`(부모) catch를 자식 catch보다 **위에** 쓰면 컴파일 에러 (아래 catch에 도달 불가)
+
+### 자주 나오는 예외
+
+| 예외 | 언제 |
+|---|---|
+| `ArithmeticException` | **정수**를 0으로 나눔 (`1.0 / 0`은 `Infinity`, 예외 아님) |
+| `ArrayIndexOutOfBoundsException` | 없는 배열 칸 |
+| `NullPointerException` | null로 메서드·필드 사용 |
+| `NumberFormatException` | `Integer.parseInt("a")` |
+| `ClassCastException` | 잘못된 다운캐스팅 |
+
+### return과 finally
+```java
+static int f() {
+    try {
+        System.out.print("t ");
+        return 1;                  // 돌아가기 직전에
+    } finally {
+        System.out.print("f ");    // finally 먼저 실행
+    }
+}
+System.out.println(f());           // t f 1
+```
+- finally 안에도 return이 있으면 그 값이 이김: `try { return 1; } finally { return 2; }` → 2

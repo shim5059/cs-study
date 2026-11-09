@@ -60,7 +60,7 @@ class Cat extends Animal {
 - `@Override`는 선택 사항 (붙이면 컴파일러가 오버라이딩 조건을 검사해 줌)
 - 오버라이딩할 때 접근 범위를 **좁히면 컴파일 에러** (public → default ✗)
 - `final` 메서드는 **오버라이딩 불가**, `final` 클래스는 **상속 불가**
-- 자식 생성자 첫 줄에는 `super();`가 자동으로 들어감 → **부모 생성자가 먼저** 실행 (`new` 할 때마다)
+- 자식 생성자 첫 줄에 `this(…)`나 `super(…)`가 **없으면** `super();`가 자동으로 들어감 → **부모 생성자가 먼저** 실행 (`new` 할 때마다, 자세한 흐름은 7주차)
 
 ## 5. 객체 캐스팅
 
@@ -92,7 +92,7 @@ if (a instanceof Cat) {   // 실제 객체가 Cat(또는 Cat의 자식)이면 tr
 |---|---|---|
 | 결정 시점 | **컴파일** 때 | **실행** 때 |
 | 기준 | **변수 타입** (`=` 왼쪽) | **실제 객체** (`new` 뒤) |
-| 대상 | 필드 | (오버라이딩된) 메서드 |
+| 대상 | 필드, **static 메서드** | (오버라이딩된) 인스턴스 메서드 |
 
 ```java
 class P { int x = 10; void show() { System.out.println("P " + x); } }
@@ -103,3 +103,29 @@ System.out.println(p.x);   // 10  (필드: 변수 타입 P)
 p.show();                  // C 20 (메서드: 실제 객체 C)
 ```
 - 다형성 = **누가 하느냐(실제 객체)에 따라 동작이 달라진다**
+
+### 필드 · static · super까지 섞인 경우 (기능사 실기 대비)
+```java
+class P {
+    int v = 10;
+    static String s() { return "Ps"; }
+    void m1() {
+        System.out.print("P1 ");
+        m2();                                  // 실제 객체 C → C의 m2
+    }
+    void m2() { System.out.print("P2 " + v + " "); }   // P 안의 코드 → P의 v
+}
+class C extends P {
+    int v = 20;
+    static String s() { return "Cs"; }
+    void m2() { System.out.print("C2 " + v + " "); }   // C 안의 코드 → C의 v
+    void m3() { super.m2(); }                  // 부모 버전 강제 호출
+}
+
+P p = new C();
+p.m1();                                        // P1 C2 20
+((C) p).m3();                                  // P2 10
+System.out.println(p.v + ((C) p).v);           // 30 (int + int → 덧셈)
+System.out.println(p.s() + " " + ((C) p).s()); // Ps Cs (static은 변수 타입)
+```
+- 메서드 안에서 쓴 필드 이름은 **그 메서드가 쓰인 클래스의 필드**

@@ -145,6 +145,76 @@ new Son();
 ```
 - 호출은 자식 → 부모 순서, **실행 완료(출력)**는 부모 → 자식 순서
 
+### 공단 예시문제 8번 (기능사 실기)
+```java
+class Test1 {
+    Test1() { System.out.print('X'); }
+    Test1(char a) {
+        this();
+        System.out.print(a);
+    }
+}
+class Test2 extends Test1 {
+    Test2() {
+        super();
+        System.out.print('Y');
+    }
+    Test2(char a) {
+        this();
+        System.out.print(a);
+    }
+}
+
+Test1 t1 = new Test2('Z');   // XYZ
+```
+
+| 순서 | 생성자 | 첫 줄 | 하는 일 |
+|---|---|---|---|
+| 1 | `Test2(char a)` | `this()` | `Test2()` 호출 |
+| 2 | `Test2()` | `super()` | **인자 없는** `Test1()` 호출 |
+| 3 | `Test1()` | (숨은 super → Object) | X |
+| 4 | `Test2()` 복귀 | | Y |
+| 5 | `Test2(char a)` 복귀 | | Z |
+
+- `Test1(char a)`는 **아무도 부르지 않아서** 실행 안 됨. 생성자는 "누가 불렀는지"를 따라간다
+
+```java
+class A {
+    A() { System.out.print("A"); }
+    A(int n) { this(); System.out.print(n); }
+}
+class B extends A {
+    B() { super(1); System.out.print("B"); }
+    B(int n) { this(); System.out.print(n); }
+}
+new B(7);   // A1B7   (B(7) → B() → A(1) → A())
+```
+- 조상이 여러 단계면 맨 위부터 출력: `G ← Pa ← Ch`면 `new Ch()` → `GPaCh`
+
+### 생성자 안에서 오버라이딩된 메서드를 부르면 (시험 단골 함정)
+```java
+class A {
+    A() { print(); }                              // 실제 객체 B → B의 print
+    void print() { System.out.print("A "); }
+}
+class B extends A {
+    int x = 7;
+    B() { print(); }
+    void print() { System.out.print("B" + x + " "); }
+}
+new B();   // B0 B7
+```
+
+| 순서 | 일어나는 일 | B의 x |
+|---|---|---|
+| 1 | 힙에 B 객체 생성, 필드는 **기본값** | 0 |
+| 2 | `B()` → 숨은 `super()` → `A()` → `print()` → **B의 print** | **0** → `B0` |
+| 3 | `A()` 끝 → 이제야 **B의 필드 초기화** (`x = 7`) | 7 |
+| 4 | `B()` 몸체의 `print()` | 7 → `B7` |
+
+- **자식 필드 초기화는 부모 생성자가 끝난 뒤**. 그 전에 자식 메서드가 불리면 필드는 기본값(0, null, false)
+- A에 `int x = 3;`이 있어도 결과는 같음 (B의 print는 **B의 x**를 읽음)
+
 ## 6. 과제: 배송 시스템 (교재 Lab 6-2)
 
 인터페이스(동사) + 추상 클래스(명사) + 다형성을 한 번에 쓰는 예제

@@ -113,6 +113,26 @@ System.out.println(a == b);        // true  (리터럴은 스트링 풀에서 �
 System.out.println(a == c);        // false (new는 항상 새 객체)
 System.out.println(a.equals(c));   // true  (String은 equals가 내용 비교로 오버라이딩됨)
 ```
+
+#### `+`로 만든 문자열 (기능사 실기 대비)
+```java
+String a = "hi";
+String d = "h";
+String e = d + "i";        // 변수가 섞인 + → 실행 중 새 객체
+String f = "h" + "i";      // 리터럴끼리 + → 컴파일 때 "hi"로 합쳐짐 → 풀 재사용
+System.out.println(a == e);        // false
+System.out.println(a == f);        // true
+System.out.println(a.equals(e));   // true
+```
+
+| 만드는 방법 | 위치 | `"hi"` 리터럴과 `==` |
+|---|---|---|
+| `"hi"` | 스트링 풀 | true |
+| `"h" + "i"` | 컴파일 때 합쳐져 풀 | true |
+| `d + "i"` | 실행 중 힙에 새 객체 | **false** |
+| `new String("hi")` | 힙에 새 객체 | **false** |
+
+- 공단 예시문제 7번: `new String("ASDF") == new String("ASDF")` → false → `ASDFASDF` 출력
 - 수정 가능한 문자열: `StringBuilder`, `StringBuffer`(동기화 지원)
 
 ### 주요 메서드 (`s = "Java is fun"`)
@@ -122,6 +142,9 @@ System.out.println(a.equals(c));   // true  (String은 equals가 내용 비교�
 | `s.length()` | 11 | 공백 포함 |
 | `s.charAt(5)` | `i` | 0번부터 |
 | `s.indexOf("a")` | 1 | 없으면 -1 |
+| `s.lastIndexOf("a")` | 3 | 뒤에서부터 찾은 위치 |
+| `s.contains("fun")` | true | 포함 여부 |
+| `"ABC".equalsIgnoreCase("abc")` | true | 대소문자 무시 비교 |
 | `s.replace("a", "o")` | `Jovo is fun` | 해당 문자 **전부** 바꿈 |
 | `s.substring(8)` | `fun` | 8번부터 끝까지 |
 | `s.substring(0, 4)` | `Java` | 0 ~ **3**번 추출 (끝 번호 **미포함**) |

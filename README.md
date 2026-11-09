@@ -1,6 +1,6 @@
 # cs-study
 
-컴퓨터공학 전공 기초(Network, DB, OS, 자료구조, 알고리즘, 프로그래밍) 복습 기록
+컴퓨터공학 전공 기초(Network, DB, OS, 자료구조, 알고리즘, 프로그래밍, 수학) 복습 기록
 
 ## Programming
 
@@ -14,6 +14,10 @@
 ## Network
 
 - [컴퓨터 통신 (Network)](Network) — 네트워크 복습 
+
+## Math
+
+- [선형대수 (Linear Algebra)](Math/Linear-Algebra) — 선형대수 복습 + NumPy로 직접 구현한 검산 코드
 
 ## Data Structure
 

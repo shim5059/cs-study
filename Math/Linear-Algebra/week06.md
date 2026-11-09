@@ -1,0 +1,89 @@
+# 6주차 · $\mathbb{R}^n$의 벡터, 내적, 외적
+
+> 헷갈렸던 부분과 해결 과정: [week06-deep-dive.md](week06-deep-dive.md)
+
+> 교재 3장 · 코드: [code/week06_vectors.py](code/week06_vectors.py) · 이 주차 증명은 [proofs.md](proofs.md)
+
+## 1. 벡터와 기본 연산
+
+- $\mathbb{R}^n$: 실수 $n$개짜리 순서쌍 전체. 원점에서 점 $P$로 가는 화살표가 **위치벡터**
+- 덧셈은 같은 칸끼리, 스칼라곱은 모든 칸에 곱한다
+
+| 연산 | 예 ($u = (1, -2, 3)$, $v = (0, 4, -1)$, $w = (2, 1, 0)$) |
+|---|---|
+| $2u - 3v + w$ | $(2, -4, 6) - (0, 12, -3) + (2, 1, 0) = (4, -15, 9)$ |
+| $2x + u = v - w$ 풀기 | $2x = (-3, 5, -4)$ → $x = (-\frac{3}{2}, \frac{5}{2}, -2)$ |
+
+## 2. 내적, 노름, 사잇각
+
+| 개념 | 식 | 결과 | 예 |
+|---|---|---|---|
+| 내적 | $u \cdot v = u_1v_1 + \cdots + u_nv_n$ | **숫자** | $(2,3)\cdot(4,-1) = 5$ |
+| 노름 (길이) | $\lVert v \rVert = \sqrt{v \cdot v}$ | 숫자, 항상 $\ge 0$ | $\lVert(1,2,2)\rVert = 3$ |
+| 단위벡터 | $\hat{v} = v / \lVert v \rVert$ | 길이 1인 벡터 | $(1,1,0) \to (\frac{1}{\sqrt2}, \frac{1}{\sqrt2}, 0)$ |
+| 사잇각 | $\cos\theta = \dfrac{u \cdot v}{\lVert u \rVert \lVert v \rVert}$ | $0 \le \theta \le \pi$ | $(1,1,0), (0,1,1)$ → $\cos\theta = \frac{1}{2}$, $\theta = 60°$ |
+
+**내적의 부호 = 방향 관계** (길이는 항상 양수라서 부호는 $\cos\theta$가 정한다)
+
+| 부호 | 각도 | 예 |
+|---|---|---|
+| $+$ | 예각 (같은 쪽) | $(2,3)\cdot(4,-1) = 5$ |
+| $0$ | 직각 (수직) | $(2,1)\cdot(-1,2) = 0$ |
+| $-$ | 둔각 (반대 쪽) | $(2,1)\cdot(-3,1) = -5$ |
+
+- $\lVert u \rVert^2 = u \cdot u$ (예: $(3,4)\cdot(3,4) = 25 = 5^2$)
+- 코시-슈바르츠: $|u \cdot v| \le \lVert u \rVert \lVert v \rVert$ ($|\cos\theta| \le 1$이라서)
+- $\lVert cv \rVert = |c|\,\lVert v \rVert$ (예: $\lVert v \rVert = 5$이면 $\lVert -2v \rVert = 10$)
+
+## 3. 정사영, 직교 분해, 반사
+
+$u$를 $v$ 방향 직선에 수직으로 내린 그림자가 정사영이다.
+
+| 이름 | 식 | 결과 | 예 $u = (2,3)$, $v = (4,0)$ |
+|---|---|---|---|
+| $\cos\theta$ | $\frac{u \cdot v}{\lVert u \rVert \lVert v \rVert}$ | 숫자 | $\frac{8}{4\sqrt{13}}$ |
+| 그림자 길이 | $\frac{u \cdot v}{\lVert v \rVert}$ | 숫자 | $2$ |
+| 그림자 벡터 $\text{proj}_v u$ | $\frac{u \cdot v}{\lVert v \rVert^2}\, v$ | **벡터** | $\frac{8}{16}(4,0) = (2, 0)$ |
+
+- 직교 분해: $u = u_\parallel + u_\perp$, $u_\perp = u - \text{proj}_v u = (0, 3)$, 검산 $u_\perp \cdot v = 0$
+- 반사 (직선 기준으로 접기): $r = 2u_\parallel - u = (2, -3)$, 길이는 그대로 $\lVert r \rVert = \lVert u \rVert = \sqrt{13}$
+
+## 4. 외적 ($\mathbb{R}^3$ 전용)
+
+$$u \times v = \begin{vmatrix} i&j&k \\ u_1&u_2&u_3 \\ v_1&v_2&v_3 \end{vmatrix}
+= (u_2v_3 - u_3v_2,\ -(u_1v_3 - u_3v_1),\ u_1v_2 - u_2v_1)$$
+
+계산법: 칸마다 그 열을 가리고 남은 2×2로 $ad - bc$, **가운데 칸만 부호 반대**
+
+| 성분 | $u = (1,2,0)$, $v = (0,1,3)$ |
+|---|---|
+| $i$ | $2 \cdot 3 - 0 \cdot 1 = 6$ |
+| $j$ | $-(1 \cdot 3 - 0 \cdot 0) = -3$ |
+| $k$ | $1 \cdot 1 - 2 \cdot 0 = 1$ |
+
+| 성질 | 예 |
+|---|---|
+| 결과는 **벡터**, $u$와 $v$ 둘 다와 수직 | $(6,-3,1)\cdot(1,2,0) = 0$, $(6,-3,1)\cdot(0,1,3) = 0$ |
+| 길이 = 평행사변형 넓이 $= \lVert u \rVert \lVert v \rVert \sin\theta$ | $\lVert(6,-3,1)\rVert = \sqrt{46}$ |
+| 순서를 바꾸면 방향 반대 $v \times u = -(u \times v)$ | $(-6, 3, -1)$ |
+
+- 삼각형 넓이 = $\frac{1}{2}\lVert u \times v \rVert$
+- 스칼라 삼중적 $u \cdot (v \times w)$ = 세 벡터를 행으로 쓴 3×3 행렬식 → 절댓값이 평행육면체 부피, 0이면 세 벡터가 한 평면 위
+  - $u = (1,0,0)$, $v = (0,2,0)$, $w = (1,1,3)$ → 부피 $6$
+
+## 5. 직접 확인
+
+```text
+u·v = 1  cosθ = 0.5  θ = 60.0 도
+u∥ = [2. 0.]  u⊥ = [0. 3.]  u⊥·v = 0.0
+반사 r = [ 2. -3.]  ‖r‖ = 3.605551  ‖u‖ = 3.605551
+u×v = [ 6 -3  1]  (u×v)·u = 0  (u×v)·v = 0
+넓이 ‖u×v‖ = 6.78233  = √46 = 6.78233
+|u·(v×w)| = 6  |det| = 6.0
+토크 τ = [ 20. -10. -10.] N·m
+```
+
+## 현업에서는
+
+- 로보틱스의 토크: $\tau = r \times F$ (관절에서 힘이 작용하는 위치 $r$, 힘 $F$)
+- 3D 그래픽스: 폴리곤 위 두 변의 외적이 법선벡터이고, 법선과 빛 방향의 내적으로 표면 밝기를 계산한다

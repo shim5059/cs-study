@@ -5,6 +5,7 @@
 - 교재: 『기초 선형대수학』(2판, 한빛아카데미) / 부교재: 『개발자를 위한 실전 선형대수학』
 - 실습 환경: Python (NumPy, SymPy), Google Colab
 - `code/`의 검산 코드는 NumPy와 파이썬 기본 `fractions` 모듈만 써서 직접 구현했고, 모두 실행해서 교안 답과 맞는지 확인했다
+- 인공지능기초II의 수학 파트(벡터·거리·미분·다변수함수)가 많이 겹쳐서 이 폴더에 합쳤다. 표에서 **AI** 표시가 붙은 주차가 그 내용이다
 
 각 주차는 두 파일로 나뉜다.
 - `weekNN.md`: 개념 요약
@@ -22,7 +23,9 @@
 | [6주차](week06.md) | $\mathbb{R}^n$ 벡터, 내적·노름·사잇각, 정사영·직교 분해·반사, 외적, 삼중적·부피 | 3장 | [deep-dive](week06-deep-dive.md) |
 | [7주차](week07.md) | 공간의 직선·평면, 코사인 유사도, 피어슨 상관계수, 최소제곱법·정규방정식 | 3.3~3.4 | [deep-dive](week07-deep-dive.md) |
 | — | 중간고사 (퀴즈 1·2 범위 = 2~6주차) · 퀴즈 문제에서 출제, 증명 포함 → [증명 모음](proofs.md) | | |
+| [8주차](week08.md) **AI** | 극한·연속·미분계수, 미분법(곱·몫·삼각·지수), 시그모이드 $\sigma' = \sigma(1-\sigma)$, 고계도함수, 연쇄법칙, SymPy | 인공지능기초II 6~7주차 | [deep-dive](week08-deep-dive.md) |
 | [9주차](week09.md) | 벡터공간, 부분공간 3조건, 영공간·열공간, span, 일차독립·종속 | 4.1~4.3 | [deep-dive](week09-deep-dive.md) |
+| [10주차](week10.md) **AI** | 함수의 정의, 이변수함수·곱집합, 그래프와 등위곡선, 좌·우극한과 연속, ε-δ, 이변수 극한(경로 판정), 편도함수, 클레로 정리 | 인공지능기초II 9주차 | [deep-dive](week10-deep-dive.md) |
 
 ## 직접 구현한 것
 
@@ -34,7 +37,9 @@
 | [week05_cofactor_cramer.py](code/week05_cofactor_cramer.py) | 재귀 여인수 전개, 수반행렬, 크래머 공식 |
 | [week06_vectors.py](code/week06_vectors.py) | 내적·사잇각·정사영·반사·외적·부피·토크 |
 | [week07_vector_applications.py](code/week07_vector_applications.py) | 직선·평면, 코사인 vs 피어슨 비교, 정규방정식 vs `np.linalg.lstsq` |
+| [week08_derivative.py](code/week08_derivative.py) | 중앙차분으로 미분 공식(몫·삼각·연쇄법칙) 검산, 시그모이드 도함수, 삼각함수 극한 |
 | [week09_subspace.py](code/week09_subspace.py) | 영공간·열공간 확인, `matrix_rank`로 일차독립 판정 |
+| [week10_multivariable.py](code/week10_multivariable.py) | 경로별 극한 비교(극한 없음 판정), 편도함수 수치 검산, $f_{xy} = f_{yx}$ 확인 |
 
 ```bash
 python3 code/week05_cofactor_cramer.py
@@ -50,11 +55,14 @@ python3 code/week05_cofactor_cramer.py
 벡터·내적(수직 = 내적 0) ─▶ 정사영 ─▶ 최소제곱법(해가 없을 때 가장 가까운 답)
           │
         외적(수직인 벡터 만들기) ─▶ 평면의 법선 ─▶ 영공간(행벡터와 수직인 벡터들)
+
+극한 ─▶ 미분(선형 연산) ─▶ 편도함수 ─▶ 그래디언트 ─▶ 최소제곱법·경사하강법      (AI 파트)
 ```
 
 - "가역이다 = RREF가 $I$ = $Ax = 0$의 해가 0뿐 = $\det \neq 0$ = 열들이 일차독립"이 전부 같은 말이라는 것. 3주차, 4주차, 9주차가 같은 사실을 다른 각도에서 본 것이었다
 - 공식을 외우는 것보다 **검산 방법**을 같이 기억하는 게 중요하다: 외적은 원래 벡터와 내적해서 0, 수반행렬은 $A \cdot \text{adj}A = \det(A)I$, 평면은 세 점 대입, 피어슨은 평균 뺀 벡터의 합이 0
 - 증명은 "가정·결론을 식으로 → 정의로 풀기 → 패턴(양변 det / 곱해서 $I$ / 정의대로 전개 / 반례) → 한 줄에 한 단계" 순서로 접근한다 ([증명 모음](proofs.md))
+- 미분도 선형 연산($(af + bg)' = af' + bg'$)이고, 이변수 극한의 $\sqrt{(x-a)^2 + (y-b)^2}$는 유클리드 거리다. 인공지능기초II의 미적분이 선형대수와 만나는 지점이 최소제곱법(편미분 = 0 → 정규방정식)
 - 정의대로 푸는 알고리즘(여인수 전개, $(A^TA)^{-1}$)과 실제로 쓰는 알고리즘(소거법·LU, QR)은 다를 수 있다
 
 **다룬 기술**
@@ -64,12 +72,14 @@ python3 code/week05_cofactor_cramer.py
 | NumPy | `@`(행렬곱) vs `*`(원소곱), `np.linalg.solve` / `inv` / `pinv` / `det` / `matrix_rank` / `lstsq`, `np.dot`, `np.cross`, `np.linalg.norm`, `np.corrcoef` |
 | 직접 구현 | 가우스-조르단 소거법, 역행렬, 상삼각화 행렬식, 재귀 여인수 전개, 크래머 공식 |
 | 수치 계산 | 부동소수점 오차(`det`가 정확히 0이 안 나옴) → `np.isclose`, `matrix_rank`로 판정, 정확한 값이 필요하면 `fractions.Fraction` |
+| 미분 | 중앙차분 수치 미분으로 공식 검산, SymPy `diff` / `limit` / `subs` / `lambdify` (수업 실습) |
 | 응용 | 코사인 유사도(검색·추천), 피어슨 상관계수, 선형 회귀(최소제곱), 법선벡터(그래픽스), 토크(로보틱스) |
 
 ## 공부하면서 고친 습관
 
 | 습관 | 고친 방법 |
 |---|---|
+| 몫의 미분 분자를 더함 | $f'g - fg'$, $f = 1$을 넣어 $-g'/g^2$이 나오는지 검산 |
 | 식 없이 답만 씀 | 서술형 대비로 "식 한 줄 + 검산 한 줄" |
 | 묻는 게 벡터인지 숫자인지 안 봄 | 답 쓰기 전에 기호($\lVert\ \rVert$가 있나)로 확인 |
 | 검산을 안 함 | 위의 주제별 검산 방법을 습관으로 |

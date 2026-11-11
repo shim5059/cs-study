@@ -3,7 +3,7 @@
 데이터베이스 설계 수업(2026-2학기)에서 배운 내용을 주차별로 정리한 복습 기록
 
 - 교재: 『데이터베이스 개론』
-- 실습 환경: MySQL Workbench, Python(pymysql)
+- 실습 환경: MySQL Workbench, Python(pymysql, pandas, Streamlit)
 - 예제 데이터는 모두 직접 만든 것이고, SQL 결과는 sqlite로 실행해 확인했다 (MySQL 전용 문장은 파일 안에 따로 표시)
 
 각 주차는 두 파일로 나뉜다.
@@ -23,3 +23,4 @@
 | — | 중간고사 (1~6장, 8장 + 9장 정규화 BCNF까지 / 7장 제외) · 서술형 10문제: 개념 5 + 관계 대수식 5 | | |
 | [7주차](week07.md) | SQL: CREATE·ALTER·DROP, SELECT·WHERE·GROUP BY·HAVING, 조인, 부속 질의문, INSERT·UPDATE·DELETE, 뷰 | 7장 | [deep-dive](week07-deep-dive.md) |
 | [8주차](week08.md) | 트랜잭션(ACID), 장애와 회복(redo·undo), 병행 제어·로킹·교착 상태, 파이썬 연동 | 10장 | [deep-dive](week08-deep-dive.md) |
+| [9주차](week09.md) | 보안 3가지, 사용자·GRANT·REVOKE·역할, Streamlit·Flask로 DB 화면 만들기, 프로젝트 과제 | 11장 | [deep-dive](week09-deep-dive.md) |

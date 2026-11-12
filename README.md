@@ -5,7 +5,7 @@
 ## Programming
 
 - [JAVA](Programming/JAVA) — 자바 복습 
-- [PYTHON](Programming/PYTHON) — 파이썬 학습
+- [PYTHON](Programming/PYTHON) — 파이썬 학습 (프로그래밍기능사 실기 대비)
 
 ## Database
 
@@ -14,6 +14,10 @@
 ## Network
 
 - [컴퓨터 통신 (Network)](Network) — 네트워크 복습 
+
+## OS
+
+- [Linux](OS/Linux) — 터미널 명령어, 경로, 권한 (프로그래밍기능사 실기 대비)
 
 ## Math
 

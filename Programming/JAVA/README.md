@@ -15,7 +15,7 @@
 | 5주차 | 오버로딩 선택 기준, try-catch-finally 실행 순서, 여러 catch, 주요 예외, return과 finally |
 | 6주차 | static은 변수 타입 기준, 필드·static·super가 섞인 다형성 |
 | 7주차 | 공단 예시문제 8번 생성자 체인, 생성자 안의 오버라이딩 호출 (+ deep-dive 2건) |
-| 8주차 | `+`로 만든 String의 `==`, String 메서드 추가 |
+| 8주차 | `+`로 만든 String의 `==`, String 메서드 추가, 자주 쓰는 라이브러리 (Math, ArrayList, HashMap) |
 
 각 주차는 두 파일로 나뉜다.
 - `weekNN.md`: 개념 요약

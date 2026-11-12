@@ -96,8 +96,20 @@ DROP TABLE 배송업체;                              -- 표 자체를 삭제
 
 | | 지우는 것 | 분류 |
 |---|---|---|
-| `DELETE FROM 표` | 데이터(행)만, **표는 남음** | DML |
+| `DELETE FROM 표` | 데이터(행)만, **표는 남음** | DML (ROLLBACK 가능) |
+| `TRUNCATE TABLE 표` | 데이터 **전부**, 표는 남음 | DDL (되돌릴 수 없음) |
 | `DROP TABLE 표` | 표 **구조까지** 통째로 | DDL |
+
+**DROP의 CASCADE / RESTRICT** (프로그래밍기능사 실기 대비, 공단 예시문제 10번)
+
+| 명령 | 뜻 |
+|---|---|
+| `DROP TABLE test CASCADE;` | test를 지우고, test를 **참조하는 제약조건까지 연쇄 삭제** |
+| `DROP TABLE test RESTRICT;` | test를 참조하는 것이 있으면 **삭제 거부** |
+
+- 외래키의 `ON DELETE CASCADE`(부모 **행** 삭제 시 자식 행 삭제)와 이름은 같지만 대상이 다르다
+- `ALTER TABLE 고객 MODIFY 고객이름 VARCHAR(30);` → 이미 있는 열의 **타입 변경** (MySQL·Oracle 문법)
+- 열을 추가·삭제·변경하는 건 `ALTER` (구조), 값을 바꾸는 건 `UPDATE` (데이터)
 
 ## 4. SELECT 기본
 
@@ -152,6 +164,25 @@ SELECT 주문제품, 수량 FROM 주문 WHERE 주문고객 = 'cat' AND 수량 >=
 ```sql
 SELECT 고객이름 FROM 고객 WHERE 나이 IS NULL;   -- 박도윤
 SELECT 고객이름 FROM 고객 WHERE 나이 = NULL;    -- 결과 0행 (= 로는 NULL을 못 찾음)
+```
+
+### 추가 연산자와 NULL 비교 (프로그래밍기능사 실기 대비)
+
+| 조건 | 뜻 | 결과 |
+|---|---|---|
+| `나이 BETWEEN 25 AND 31` | 25 이상 31 이하 (**양 끝 포함**) | 이서연(31), 김하은(27) |
+| `등급 IN ('vip', 'silver')` | 목록 중 하나와 같음 | 이서연, 박도윤, 최지호 |
+| `나이 <> 23` | 23이 아님 | 이서연, 김하은, 최지호 — **박도윤(NULL)은 안 나옴** |
+
+- NULL은 "모름"이라 `=`, `<>`, `>` 등 **어떤 비교를 해도 결과가 "알 수 없음"** → WHERE에서 탈락. NULL을 고르는 건 `IS NULL`뿐
+- `AND`가 `OR`보다 **먼저** 계산된다 (곱셈이 덧셈보다 먼저인 것처럼)
+
+```sql
+WHERE 등급 = 'silver' OR 등급 = 'gold' AND 적립금 >= 2000
+-- silver 전부 OR (gold이면서 2000 이상) → 김민준, 박도윤, 최지호
+
+WHERE (등급 = 'silver' OR 등급 = 'gold') AND 적립금 >= 2000
+-- (silver 또는 gold) 중 2000 이상 → 김민준
 ```
 
 ## 6. ORDER BY
@@ -218,6 +249,33 @@ FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
 ```
 그래서 `SELECT`에서 만든 별명은 `ORDER BY`에서 쓸 수 있다.
 
+### 문장 → GROUP BY 쿼리로 바꾸는 4단계 (프로그래밍기능사 실기 대비)
+
+| 질문 | 문제 속 단서 | SQL |
+|---|---|---|
+| ① 무엇**별**로 묶나? | "~별" | `GROUP BY 기준열` |
+| ② 묶음마다 무엇을 계산? | 몇 개 / 합계 / 평균 / 최고 / 최저 | `COUNT(*)` / `SUM` / `AVG` / `MAX` / `MIN` |
+| ③ **묶음**에 거는 조건? | 주어가 인원·합계·평균·최고 | `HAVING 집계함수 조건` |
+| ④ **개인(행)**에 거는 조건? | 주어가 한 사람·한 행 | `WHERE 조건` (없으면 WHERE를 아예 안 씀) |
+
+```sql
+-- 고객별 최대 주문 수량, 최대 수량이 15 이상인 고객만, 고객 오름차순
+SELECT 주문고객, MAX(수량) AS 최대수량
+FROM 주문
+GROUP BY 주문고객
+HAVING MAX(수량) >= 15
+ORDER BY 주문고객;
+-- dog 20 / owl 15
+
+-- 수량 10개 이상인 주문만 대상으로, 고객별 수량 합계
+SELECT 주문고객, SUM(수량) AS 합계
+FROM 주문
+WHERE 수량 >= 10
+GROUP BY 주문고객;
+-- cat 22 / dog 20 / owl 15     (cat의 5개짜리 o3는 WHERE에서 먼저 빠짐)
+```
+- GROUP BY를 하면 한 묶음에 값이 여러 개라, SELECT·HAVING에 그냥 `수량`이라고 쓰면 무엇을 고를지 정할 수 없다 → 반드시 집계 함수로
+
 ## 9. 조인
 
 **쉼표 + WHERE** (교재 방식)
@@ -276,6 +334,26 @@ ORDER BY "총주문수량" DESC;
 김하은 | 15
 ```
 
+### 집합연산자: 결과를 위아래로 합치기 (프로그래밍기능사 실기 대비)
+
+| 연산자 | 뜻 | 관계 대수 |
+|---|---|---|
+| `UNION` | 합집합, **중복 제거** | ∪ |
+| `UNION ALL` | 합집합, 중복 그대로 | |
+| `INTERSECT` | 교집합 | ∩ |
+| `EXCEPT` (Oracle은 `MINUS`) | 차집합 | − |
+
+```sql
+SELECT 주문고객 FROM 주문 UNION SELECT 고객아이디 FROM 고객 WHERE 등급 = 'gold';
+-- cat / dog / owl
+SELECT 고객아이디 FROM 고객 WHERE 등급 = 'gold' INTERSECT SELECT 주문고객 FROM 주문;
+-- cat / owl
+SELECT 고객아이디 FROM 고객 EXCEPT SELECT 주문고객 FROM 주문;
+-- bee / fox   (주문한 적 없는 고객 = 위 NOT IN 결과와 같음)
+```
+- 위·아래 SELECT의 **열 개수와 타입이 같아야** 한다
+- 조인은 **옆으로**(열이 늘어남), 집합연산자는 **위아래로**(행이 늘어남)
+
 ## 10. 부속 질의문 (서브쿼리)
 
 괄호 안 `SELECT`가 **먼저** 실행되고, 그 결과를 바깥 `WHERE`가 쓴다.
@@ -315,6 +393,15 @@ WHERE EXISTS (SELECT * FROM 주문
 - 부속 질의문 안에는 `ORDER BY`를 쓰지 않는다
 - 해석 요령: "~한 고객의 이름" → 바깥 = 고객, 괄호 안 = "~한" 조건을 가진 표
 
+**공단 예시문제 11번 (프로그래밍기능사 실기)**
+```
+t1: (A,5) (D,2) (F,3) (G,1)        t2: (A,3) (C,7) (D,6) (H,2)
+```
+```sql
+SELECT SUM(c2) AS ans FROM t2 WHERE c1 NOT IN (SELECT c1 FROM t1);
+```
+① 안쪽: A, D, F, G → ② t2에서 목록에 없는 c1: C(7), H(2) → ③ 7 + 2 = **9**
+
 ## 11. INSERT / UPDATE / DELETE
 
 ```sql
@@ -345,6 +432,32 @@ SELECT * FROM 우수고객;
 - 뷰는 주로 **조회용**. 기본키가 빠졌거나 집계·조인으로 만든 뷰는 수정이 안 된다
 - `WITH CHECK OPTION`: 뷰를 통한 삽입·수정이 뷰의 조건(`등급 = 'gold'`)을 벗어나지 못하게 막음 (sqlite 미지원이라 실행 확인 못 함)
 - 삭제: `DROP VIEW 우수고객;`
+
+- 뷰 정의는 `ALTER`로 못 바꾼다 → `DROP VIEW` 후 다시 `CREATE VIEW`
+- 틀: `CREATE VIEW 이름 AS` 뒤에 **SELECT문이 통째로** 온다 (조건만 쓰면 안 됨)
+
+## 12-1. 인덱스와 데이터 사전 조회 (프로그래밍기능사 실기 출제기준)
+
+**인덱스** = 검색을 빠르게 하는 색인 (책 뒤의 찾아보기)
+
+```sql
+CREATE INDEX idx_등급 ON 고객(등급);            -- 고객 표의 등급 열에 인덱스
+CREATE UNIQUE INDEX idx_아이디 ON 고객(고객아이디);   -- 중복 불가 인덱스
+DROP INDEX idx_등급;
+```
+| 장점 | 단점 |
+|---|---|
+| 검색(SELECT)이 빨라짐 | 저장 공간 추가, **삽입·수정·삭제가 느려짐** (색인도 같이 고쳐야 함) |
+
+- 기본키에는 DBMS가 자동으로 인덱스를 만든다
+
+**데이터 사전(시스템 카탈로그) 조회** — 1주차 개념: DBMS가 자동 관리, 사용자는 **읽기(SELECT)만**
+
+| DBMS | SQL |
+|---|---|
+| MySQL | `SELECT * FROM INFORMATION_SCHEMA.TABLES;` (테이블 목록) |
+| MySQL | `SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '고객';` (열 정보) |
+| Oracle | `SELECT * FROM USER_TABLES;` |
 
 ## 13. 삽입 SQL (프로그램 속 SQL)
 

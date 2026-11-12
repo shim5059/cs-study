@@ -154,3 +154,66 @@ System.out.println(a.equals(e));   // true
 | `String.join("-", "2026", "11", "04")` | `2026-11-04` | |
 | `String.valueOf(100) + 1` | `1001` | 문자열 연결 |
 | `"Java".compareTo("Kotlin")` | -1 | 사전 순 비교 (같으면 0) |
+
+## 5. 자주 쓰는 라이브러리 (프로그래밍기능사 실기 대비)
+
+> 출제기준의 "라이브러리 활용". 다 외울 필요는 없고 **이름을 보고 뜻이 떠오르면** 충분하다. 모두 직접 실행해 확인
+
+### 패키지와 import
+| 패키지 | 들어 있는 것 | import |
+|---|---|---|
+| `java.lang` | `String`, `Math`, `System`, `Integer`, `Object` | **자동** |
+| `java.util` | `ArrayList`, `HashMap`, `Scanner`, `Random`, `Arrays` | 필요 |
+| `java.io` / `java.net` | 입출력 / 네트워크 | 필요 |
+
+```java
+import java.util.ArrayList;   // 클래스 하나만
+import java.util.*;           // 패키지 전체
+```
+
+### Math
+| 메서드 | 무엇을 하나 | 결과 |
+|---|---|---|
+| `Math.abs(-3)` | 절댓값 | `3` |
+| `Math.max(3, 7)` / `Math.min(3, 7)` | 큰 값 / 작은 값 | `7` / `3` |
+| `Math.pow(2, 3)` | 거듭제곱 | `8.0` (**double**) |
+| `Math.sqrt(16)` | 제곱근 | `4.0` (**double**) |
+| `Math.ceil(2.1)` / `Math.floor(2.9)` | 올림 / 내림 | `3.0` / `2.0` (**double**) |
+| `Math.ceil(-2.1)` / `Math.floor(-2.1)` | 수직선 위 / 아래 | `-2.0` / `-3.0` |
+| `Math.round(2.5)` / `Math.round(-2.5)` | 반올림 (0.5 더해 내림) | `3` / `-2` (**정수**) |
+| `(int)(Math.random() * 6) + 1` | 0.0 이상 1.0 미만 난수 → 1~6 | |
+
+### ArrayList (Python 리스트와 비교)
+```java
+ArrayList<Integer> list = new ArrayList<>();
+list.add(5);              // [5]               append
+list.add(8);              // [5, 8]
+list.add(0, 3);           // [3, 5, 8]         insert(0, 3)
+list.remove(1);           // [3, 8]            pop(1): int는 "위치"
+list.remove(Integer.valueOf(8));   // [3]      remove(8): 값으로 지우려면 감싸기
+list.get(0);              // 3                 a[0]
+list.set(0, 9);           // [9]               a[0] = 9
+list.size();              // 1                 len(a)
+list.contains(9);         // true              9 in a
+```
+
+### HashMap (Python 딕셔너리와 비교)
+```java
+HashMap<String, Integer> map = new HashMap<>();
+map.put("a", 1);
+map.put("a", 5);               // 같은 키 → 덮어쓰기
+map.get("a");                  // 5
+map.get("z");                  // null (Python d['z']는 에러)
+map.getOrDefault("z", 0);      // 0    (d.get('z', 0))
+map.containsKey("a");          // true ('a' in d)
+map.size();                    // 1
+map.remove("a");
+```
+
+### 기타
+| 코드 | 결과 |
+|---|---|
+| `new Random().nextInt(10)` | 0 이상 10 **미만** 정수 |
+| `Arrays.sort(arr)` / `Arrays.toString(arr)` | 배열 정렬 (void) / `[2, 5, 9]` 문자열 |
+| `Integer.parseInt("42") + 1` | `43` |
+| `Character.isDigit('7')` / `Character.toUpperCase('a')` | `true` / `A` |

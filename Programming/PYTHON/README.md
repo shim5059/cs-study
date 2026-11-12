@@ -31,6 +31,7 @@
 | [04](04-class.md) | 클래스, self, 메모리 구조, 상속·생성자 순서 (Java 비교) | Sec 10 | [deep-dive](04-class-deep-dive.md) |
 | [05](05-lambda-builtins.md) | lambda, map, filter, enumerate, zip | Sec 10 | (틀린 것 없음) |
 | [06](06-tree-traversal.md) | 이진 트리 만들기, 전위·중위·후위 순회 | 예시문제 3번 | [deep-dive](06-tree-traversal-deep-dive.md) |
+| [07](07-library.md) | import, math, random, 내장 함수 (Java와 다른 점) | Sec 01 | (틀린 것 없음) |
 
 ## 실행 결과 문제 체크리스트
 

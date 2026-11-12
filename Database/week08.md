@@ -35,6 +35,22 @@ except sqlite3.Error:
 9000원 이체 → 첫 UPDATE가 CHECK 위반 → ROLLBACK → A01 7000, B02 8000 그대로
 ```
 
+**SQL만으로 추적하기** (프로그래밍기능사 실기 대비, sqlite로 실행 확인)
+
+COMMIT = 세이브, ROLLBACK = **마지막 COMMIT** 지점으로 불러오기
+```sql
+-- 시작: 상품 A 10, B 5
+UPDATE 상품 SET 재고 = 재고 - 3 WHERE 코드 = 'A';   -- A 7, B 5
+COMMIT;                                              -- 세이브
+DELETE FROM 상품 WHERE 재고 < 8;                     -- 둘 다 삭제
+INSERT INTO 상품 VALUES ('C', 7);                    -- C 7
+ROLLBACK;                                            -- 세이브로 → A 7, B 5
+UPDATE 상품 SET 재고 = 재고 * 2;                     -- A 14, B 10
+COMMIT;
+```
+- `DROP`·`TRUNCATE` 같은 DDL은 실행 즉시 확정되어 ROLLBACK으로 못 되돌린다 (DELETE와의 차이)
+- `SAVEPOINT 이름;` + `ROLLBACK TO 이름;` → 중간 지점까지만 되돌리기
+
 **상태 5가지**
 ```
            마지막 연산 실행 끝          commit 실행

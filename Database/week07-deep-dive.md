@@ -331,3 +331,72 @@ SELECT 이름, 점수 FROM 학생 WHERE 점수 >= 90;
 | 개인 조건을 HAVING에, 조건 없는 `WHERE 학과` | 한 사람 조건 = WHERE, 묶음 조건 = HAVING, 없으면 WHERE 생략 |
 | `NULL <> 85`는 참 | NULL 비교는 **알 수 없음 → 탈락** |
 | `CREATE VIEW 이름 AS 조건` | `AS` 뒤에 **SELECT문 전체** |
+
+---
+
+# SQL 집중 연습 · 모의고사에서 틀린 것 (2026-11-13)
+
+## 13. WHERE에는 "열 이름", HAVING에는 "조건"이라고 생각했다
+
+### 처음 생각 (오답)
+```sql
+-- 분야가 소설이고 가격이 18000 이상인 도서의 제목과 가격, 가격 높은 순
+SELECT 제목, 가격
+FROM 도서
+WHERE 분야, 가격
+GROUP BY 제목
+HAVING 분야 = '소설' AND 가격 >= 18000
+ORDER BY ASC 가격
+```
+조건식은 완벽했는데 **넣는 칸**이 틀렸다. `WHERE 학과`, `WHERE 부서`처럼 WHERE 뒤에 열 이름만 쓰던 습관의 원인이 이것이었다.
+
+### 원리
+| 절 | 하는 일 |
+|---|---|
+| WHERE | **한 줄씩** 보고 버림 → 조건식 **통째로** |
+| GROUP BY | "~별"이 있을 때만 묶음 |
+| HAVING | **묶음 단위**로 버림 (GROUP BY가 있을 때만) |
+
+```sql
+SELECT 제목, 가격
+FROM 도서
+WHERE 분야 = '소설' AND 가격 >= 18000
+ORDER BY 가격 DESC;
+```
+
+### 깨달음
+조건의 주어가 **한 줄**(도서 한 권)이면 WHERE. "~별"이 없으면 GROUP BY·HAVING은 **지운다**. 그 뒤 연습 2~5에서는 이 실수가 다시 나오지 않았다.
+
+---
+
+## 14. 연습 중 나온 나머지 실수
+
+| 내 답 | 정답 | 이유 |
+|---|---|---|
+| `출판년도 >= 2020 AND 분야 = 'IT' OR 분야 = '인문'` | `... AND (분야 = 'IT' OR 분야 = '인문')` 또는 `분야 IN ('IT', '인문')` | **AND가 OR보다 먼저** → 괄호 없으면 2018년 인문 책도 나옴 |
+| `ORDER BY ASC 가격` (2회), `ORDERT` | `ORDER BY 가격 DESC` | **열 먼저, 방향은 뒤**. "높은 순" = DESC |
+| `SELECT COUNT(도서), AVG(가격) ... GROUP BY 분야` | `SELECT 분야, COUNT(*) AS 도서수, ...` | "~별" 열은 **SELECT 맨 앞에도**. COUNT 괄호 안은 열 이름이나 `*` (테이블 이름 ✗) |
+| `ORDER BY 가격 ASC` (그룹 쿼리) | `ORDER BY 최고가격 DESC` | 묶은 결과엔 개별 가격이 없음 → 집계 값(별칭)으로 정렬 |
+
+**별칭 따옴표 정리** (5회 반복 후 확정)
+| 경우 | 쓰는 법 |
+|---|---|
+| 별칭 지정 없음 | 안 붙여도 됨 |
+| 공백 없는 별칭 | `AS 최고가격` |
+| 공백 있는 별칭 | `AS "최고 가격"` (큰따옴표) |
+| 작은따옴표 | **값 전용** (`'소설'`) |
+
+---
+
+## 15. 모의고사 1·2회 SQL
+
+| 문제 | 내 답 | 정답 | 이유 |
+|---|---|---|---|
+| 3글자, '이'로 끝남 | `'%__이'` | `'__이'` | `%`가 있으면 3글자 **이상**. 글자 수가 정해지면 `_`만 (진단 `'박%_'`와 같은 실수) |
+| 20 이상 30 이하 | `BETWEEN 20>= AND 30<=` | `BETWEEN 20 AND 30` | BETWEEN에 이상·이하가 들어 있음. **작은 값이 앞** (`30 AND 20`이면 0행) |
+| 부서별 평균, 300 이상 | `SELECT 부서, 급여 AS '평균 급여' ... WHERE 부서` | `SELECT 부서, AVG(급여) AS 평균급여 ... (WHERE 없음)` | 집계 함수 빠짐, 조건 없는 WHERE, 별칭 따옴표 |
+| 고객별 총 수량 | `SELECT 고객, 수량 AS "총수량" ... ORDER BY 수량 DESC` | `SELECT 고객, SUM(수량) AS 총수량 ... ORDER BY 총수량 DESC` | "총"·"합계" = **SUM**. HAVING에는 썼는데 SELECT·ORDER BY에서 빠뜨림 |
+| LEFT JOIN + `ORDER BY cnt DESC, d.dname` | Dev, HR, Ops / 열 이름 `d.dname`, `e.id` | Dev, **Ops, HR** / 열 이름 `dname`, `cnt` | 정렬은 **첫 기준(cnt)부터**, 결과 열 이름은 SELECT의 이름(별칭) |
+| `... WHERE score <> 70 UNION ... WHERE score IS NULL ORDER BY name DESC` | D, A | D, **B**, A | NULL 탈락은 맞았지만 UNION **아래쪽 결과(B)**를 빠뜨림 → 위·아래를 따로 적고 합친다 |
+
+2회 10번에서 별칭을 큰따옴표로 써서 따옴표 실수는 고쳐졌다. WHERE·GROUP BY·HAVING·DESC도 전부 맞았다.

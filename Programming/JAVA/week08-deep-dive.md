@@ -237,3 +237,16 @@ System.out.println(o.getClass().getName());   // Donut (변수 타입 Object가 
 | replace는 하나만 | **전부** 치환 |
 | substring은 지우기 | 끝 직전까지 **추출** |
 | getClass = 비교 | **실제 객체의 클래스 이름** |
+
+---
+
+### 기능사 실기 모의고사 1회에서 틀린 것 (2026-11-13): `==`와 `equals`를 반대로
+```java
+String a = "ab";
+String b = "a";
+String c = b + "b";
+System.out.println((a == c) + " " + a.equals(c));
+```
+내 답: `true false` (정답: `false true`)
+
+판단 질문은 하나: **"새 객체가 만들어졌나?"** `b + "b"`는 변수가 섞인 `+`라 실행 중 새 객체 → `==` false, 내용은 같으니 `equals` true. 2회(`new String`, `"ja" + "va"`)에서는 맞혔다.

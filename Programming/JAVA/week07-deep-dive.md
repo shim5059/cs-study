@@ -351,3 +351,55 @@ x는 처음부터 B 객체 안에 칸이 **있다**. 0인 이유는 **B의 필�
 | this()로 가면 super 없음 | **도착한 생성자**에 숨은 super() |
 | 같은 이름 생성자는 다 실행 | **불린 생성자만** 실행 (인자 모양으로 결정) |
 | 부모 생성자 안에서 자식 필드가 0인 건 부모에 필드가 없어서 | 자식 필드 초기화는 **부모 생성자가 끝난 뒤** |
+
+---
+
+### 모의고사에서 또 틀린 것 (2026-11-13) — 생성자 안의 오버라이딩, 3번째
+
+**모의고사 1회**
+```java
+class A {
+    int n = 10;
+    A() { System.out.print("A" + get() + " "); }
+    int get() { return n; }
+}
+class B extends A {
+    int n = 20;
+    B() { super(); System.out.print("B" + get() + " "); }
+    int get() { return n; }
+}
+A obj = new B();
+System.out.print(obj.n);
+```
+내 답: `A20 B20` (정답: `A0 B20 10`)
+- 실제 객체가 B라서 B의 get이 불린다는 건 맞혔다
+- 그 시점 B의 n이 아직 **0**인 것, 25번 줄 `obj.n`(필드는 **변수 타입 A** → 10)을 빠뜨림
+
+**모의고사 2회**
+```java
+class P {
+    int v = 1;
+    P() { show(); }
+    void show() { System.out.print("P" + v + " "); }
+}
+class C extends P {
+    int v = 2;
+    C() { show(); }
+    void show() { System.out.print("C" + v + " "); }
+}
+P p = new C();
+p.show();
+System.out.print(p.v);
+```
+내 답: `P0 C0 P1 1` (정답: `C0 C2 C2 1`)
+- 이번엔 P() 안의 show()와 `p.show()`를 **P 버전**이라고 봄
+
+| 순서 | 실행 | 출력 | C의 v |
+|---|---|---|---|
+| 1 | `C()` → 숨은 super() → `P()` 안의 show() → **C의 show** | `C0` | 0 |
+| 2 | P() 끝 → C 필드 초기화 | | 2 |
+| 3 | `C()` 안의 show() | `C2` | 2 |
+| 4 | `p.show()` → 메서드는 실제 객체 → **C의 show** | `C2` | |
+| 5 | `p.v` → 필드는 **변수 타입 P** | `1` | |
+
+> **메서드 = 실제 객체(new 뒤), 필드 = 변수 타입(앞)**. 생성자 안이든 `p.`이든 예외 없음. P가 등장하는 건 필드뿐

@@ -188,9 +188,9 @@ SELECT 주문제품, SUM(수량) AS "총주문수량" FROM 주문 GROUP BY 주�
 
 ---
 
-# 프로그래밍기능사 실기 대비 중 틀린 것 (2026-11-12)
+# SQL을 직접 쓰며 틀린 것 (2026-11-12)
 
-> 실기는 SQL을 **직접 써서** 답한다 (공단 예시문제 10번). 그래서 개념보다 철자·기호에서 점수가 샌다
+> SQL을 **직접 써 보면** 개념보다 철자·기호에서 실수가 난다
 
 ## 8. CREATE TABLE: 내용은 맞는데 철자·기호가 틀림 (2회)
 
@@ -334,7 +334,7 @@ SELECT 이름, 점수 FROM 학생 WHERE 점수 >= 90;
 
 ---
 
-# SQL 집중 연습 · 모의고사에서 틀린 것 (2026-11-13)
+# SQL 집중 연습에서 틀린 것 (2026-11-13)
 
 ## 13. WHERE에는 "열 이름", HAVING에는 "조건"이라고 생각했다
 
@@ -388,7 +388,7 @@ ORDER BY 가격 DESC;
 
 ---
 
-## 15. 모의고사 1·2회 SQL
+## 15. 문제 풀이에서 틀린 SQL
 
 | 문제 | 내 답 | 정답 | 이유 |
 |---|---|---|---|
@@ -399,4 +399,32 @@ ORDER BY 가격 DESC;
 | LEFT JOIN + `ORDER BY cnt DESC, d.dname` | Dev, HR, Ops / 열 이름 `d.dname`, `e.id` | Dev, **Ops, HR** / 열 이름 `dname`, `cnt` | 정렬은 **첫 기준(cnt)부터**, 결과 열 이름은 SELECT의 이름(별칭) |
 | `... WHERE score <> 70 UNION ... WHERE score IS NULL ORDER BY name DESC` | D, A | D, **B**, A | NULL 탈락은 맞았지만 UNION **아래쪽 결과(B)**를 빠뜨림 → 위·아래를 따로 적고 합친다 |
 
-2회 10번에서 별칭을 큰따옴표로 써서 따옴표 실수는 고쳐졌다. WHERE·GROUP BY·HAVING·DESC도 전부 맞았다.
+다음 풀이에서 별칭을 큰따옴표로 써서 따옴표 실수는 고쳐졌다. WHERE·GROUP BY·HAVING·DESC도 전부 맞았다.
+
+---
+
+## 16. 키워드 빈칸에서 틀린 것 (2026-11-13 ~ 14)
+
+| 문제 | 내 답 | 정답 | 이유 |
+|---|---|---|---|
+| DML을 모두 고르기 (INSERT, CREATE, UPDATE, GRANT, DELETE, SELECT) | INSERT, UPDATE, DELETE | + **SELECT** | 조회도 데이터를 다루는 일 |
+| 모든 행 삭제, 구조는 유지 (2회) | `DELETE ALL`, `DELETE DISTRUCT` | `TRUNCATE TABLE` | 두 답 모두 없는 문법. `DISTINCT`는 중복 제거 |
+| 참조하는 표가 있으면 삭제 거부 | `CASCADE` | `RESTRICT` | CASCADE는 반대(함께 삭제) |
+| 같은 이름 열로 조인 `JOIN dept ( ) (dept_id)` | `IN` | `USING` | IN은 WHERE의 값 목록 연산자 |
+| `CREATE INDEX idx_emp ( ) Emp(...)` | `GRANT` | `ON` | GRANT는 권한 부여. 색인 대상 표는 ON |
+| 인덱스 재구성 `ALTER INDEX … ( )` | (모름) | `REBUILD` | 재구성 = 다시 짓기 |
+| 주문 2건 이상인 고객 | `HAVING 주문건수 >= 2` | `HAVING COUNT(*) >= 2` | 그런 열·별칭이 없음. HAVING은 SELECT보다 먼저 |
+| 실행 순서 | FROM, HAVING, GROUP BY, WHERE, ORDER BY, SELECT | FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY | 묶기 전에 HAVING 불가 |
+
+LEFT JOIN에서 dept_id가 NULL인 사원의 dname → `NULL`은 맞혔다.
+
+**철자 주의**: `TRUNCATE`, `DISTINCT`, `RESTRICT`, `CASCADE`, `REFERENCES`(끝 S), `FOREIGN`, `VALUES`(끝 S), `BETWEEN`, `COMMIT`(M 둘), `ROLLBACK`(L 둘), `REBUILD`, `ORDER BY`(`ORDERT` ✗)
+
+### 정리
+| 착각 | 바로잡은 규칙 |
+|---|---|
+| SELECT는 DML이 아니다 | DML = 조회·추가·수정·삭제 |
+| 행 전부 삭제를 DELETE로 | 구조 유지 + 모든 행 = `TRUNCATE TABLE` |
+| 거부 = CASCADE | 거부 `RESTRICT`, 연쇄 `CASCADE` |
+| 빈칸 앞뒤를 안 봄 | 뒤가 조건식 → `ON`, `(열)` → `USING` |
+| HAVING에 이름 붙인 값 | HAVING에는 집계 함수 그대로 |

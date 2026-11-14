@@ -35,7 +35,7 @@ except sqlite3.Error:
 9000원 이체 → 첫 UPDATE가 CHECK 위반 → ROLLBACK → A01 7000, B02 8000 그대로
 ```
 
-**SQL만으로 추적하기** (프로그래밍기능사 실기 대비, sqlite로 실행 확인)
+**SQL만으로 추적하기** (sqlite로 실행 확인)
 
 COMMIT = 세이브, ROLLBACK = **마지막 COMMIT** 지점으로 불러오기
 ```sql

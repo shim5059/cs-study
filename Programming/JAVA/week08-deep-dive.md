@@ -240,7 +240,7 @@ System.out.println(o.getClass().getName());   // Donut (변수 타입 Object가 
 
 ---
 
-### 기능사 실기 모의고사 1회에서 틀린 것 (2026-11-13): `==`와 `equals`를 반대로
+### 다시 틀린 것 (2026-11-13): `==`와 `equals`를 반대로
 ```java
 String a = "ab";
 String b = "a";
@@ -249,4 +249,16 @@ System.out.println((a == c) + " " + a.equals(c));
 ```
 내 답: `true false` (정답: `false true`)
 
-판단 질문은 하나: **"새 객체가 만들어졌나?"** `b + "b"`는 변수가 섞인 `+`라 실행 중 새 객체 → `==` false, 내용은 같으니 `equals` true. 2회(`new String`, `"ja" + "va"`)에서는 맞혔다.
+판단 질문은 하나: **"새 객체가 만들어졌나?"** `b + "b"`는 변수가 섞인 `+`라 실행 중 새 객체 → `==` false, 내용은 같으니 `equals` true. 다음 문제(`new String`, `"ja" + "va"`)에서는 맞혔다.
+
+---
+
+### replaceAll 정규식을 반대로 읽음 (2026-11-14)
+```java
+String str = "ABC!@#def*&^123";
+String res = str.replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,.]", "*");
+System.out.print(res);
+```
+내 답: `***!@#****&****` (정답: `ABC***def***123`)
+
+괄호 안 맨 앞의 `^`는 "**이것들이 아닌**". 허용 목록(한글·영문·숫자·쉼표·마침표)에 **없는** 특수문자만 `*`로 바뀐다. 쓴 답은 `^`가 없을 때의 결과(`***!@#****&^***`)와 거의 같았다. 정규식이 나오면 `[` 바로 뒤에 `^`가 있는지부터 본다.

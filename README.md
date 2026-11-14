@@ -5,7 +5,7 @@
 ## Programming
 
 - [JAVA](Programming/JAVA) — 자바 복습 
-- [PYTHON](Programming/PYTHON) — 파이썬 학습 (프로그래밍기능사 실기 대비)
+- [PYTHON](Programming/PYTHON) — 파이썬 학습 (Java와 비교하며 정리)
 
 ## Database
 
@@ -17,7 +17,7 @@
 
 ## OS
 
-- [Linux](OS/Linux) — 터미널 명령어, 경로, 권한 (프로그래밍기능사 실기 대비)
+- [Linux](OS/Linux) — 터미널 명령어, 경로, 권한, 환경 변수
 
 ## Math
 

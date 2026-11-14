@@ -128,7 +128,7 @@ m ──▶ [ ● , ● ]          m.length    = 2  (행 수)
 ```
 그래서 안쪽 반복 조건은 `j < m[i].length`라고 쓴다.
 
-### 다시 틀림: `r.length` = `r[0].length`라고 생각 (기능사 실기 대비 중)
+### 다시 틀림: `r.length` = `r[0].length`라고 생각 (복습 중)
 ```java
 int[] a = {1, 2, 3};
 int[] b = a;

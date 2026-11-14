@@ -40,9 +40,28 @@ k.climb();              // 나무 타기
 System.out.println(a == k);   // true (같은 객체)
 ```
 
+### 오버로딩은 덮어쓰지 않는다 (복습 추가)
+```java
+class Parent {
+    int x, y;
+    Parent(int x, int y) { this.x = x; this.y = y; }
+    int getX() { return x * y; }
+}
+class Child extends Parent {
+    int x;
+    Child(int x) { super(x + 1, x); this.x = x; }
+    int getX(int n) { return super.getX() + n; }   // 매개변수가 다름 → 오버로딩
+}
+Parent parent = new Child(10);
+System.out.println(parent.getX());   // 110
+```
+- Child의 `getX(int n)`은 매개변수가 달라서 **오버라이딩이 아니라 오버로딩**. `getX()`를 덮어쓰지 않는다
+- 그래서 `parent.getX()`는 Parent의 `getX()` → 그 안의 x는 Parent의 x(11), y는 10 → **110**
+- Child의 x(10)는 Parent의 x를 가리는(숨기는) 별개 필드. Parent 메서드 안에서는 Parent의 x를 쓴다
+
 ## 2. 추상 클래스
 - **추상 메서드**: 내용 `{}` 없이 선언만 → `abstract void show();`
-- 추상 메서드가 **하나라도** 있으면 클래스에 `abstract`
+- 추상 메서드가 **하나라도** 있으면 클래스에 `abstract` (철자: 끝에 s 없음. `abstracts` ✗)
 - `new` 불가, **변수 타입으로는 가능** (업캐스팅)
 - 일반 필드·일반 메서드·생성자 가질 수 있음
 - 자식은 추상 메서드를 **전부** 구현하거나, 자신도 `abstract`가 되어 다음 자식에게 넘김
@@ -105,6 +124,21 @@ DonutUtil.printStart();     // -- 시작 --
 new Donut().make();         // 도넛을 만듭니다. (물려받은 default)
 ```
 
+- 구현 클래스가 default 메서드를 **다시 정의하면** 그 버전이 실행된다
+```java
+interface Op {
+    int calc1(int a, int b);
+    default void calc2() { System.out.print("Good"); }
+}
+class Add implements Op {
+    public int calc1(int a, int b) { return a + b; }
+    public void calc2() { System.out.print("Fine"); }   // default 재정의
+}
+Op add = new Add();
+System.out.println(add.calc1(10, 5));   // 15
+add.calc2();                            // Fine
+```
+
 ## 4. 추상 클래스 vs 인터페이스
 
 | | 추상 클래스 | 인터페이스 |
@@ -145,7 +179,7 @@ new Son();
 ```
 - 호출은 자식 → 부모 순서, **실행 완료(출력)**는 부모 → 자식 순서
 
-### 공단 예시문제 8번 (기능사 실기)
+### 생성자 체인 예제 (this() · super())
 ```java
 class Test1 {
     Test1() { System.out.print('X'); }

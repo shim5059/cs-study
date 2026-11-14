@@ -135,6 +135,22 @@ for k, v in d.items():      # 변수 2개 → items()
 ```
 - Java로 치면 `in d` = `containsKey`, `in d.values()` = `containsValue`
 
+**`get(2)`의 2는 위치가 아니라 키**
+```python
+scores = [[70, 65, 80], [95, 100, 90], [60, 75, 55], [88, 92, 84]]
+result = {}
+idx = 1
+for row in scores:
+    total = 0
+    for v in row:
+        total += v
+    result[idx] = total
+    idx += 1
+print(result)          # {1: 215, 2: 285, 3: 190, 4: 264}
+print(result.get(2))   # 285 (두 번째 줄의 합)
+```
+- idx가 1부터라 키 2는 **두 번째** 줄. 리스트처럼 0부터 세면 틀린다
+
 ## 4. 튜플 · 세트
 
 ```python
@@ -152,6 +168,24 @@ print({1, 2, 3} | {3, 4})       # {1, 2, 3, 4} 합집합
 print({1, 2, 3} & {2, 3, 4})    # {2, 3} 교집합
 print({1, 2, 3} - {2})          # {1, 3} 차집합
 ```
+
+**추가하는 방법은 자료형마다 다르다** (세트에는 `append`가 없다)
+
+```python
+s = {1, 2, 3}
+s.add(4)          # 하나 추가 → {1, 2, 3, 4}
+s.update([5, 6])  # 여러 개 추가
+# s.append(4)     # AttributeError: 'set' object has no attribute 'append'
+print(sorted(s))  # [1, 2, 3, 4, 5, 6]  (sorted는 리스트를 돌려줌)
+```
+| 자료형 | 하나 추가 | 여러 개 추가 |
+|---|---|---|
+| 리스트 `[1, 2]` | `append(x)` (맨 뒤) | `extend([…])` |
+| 세트 `{1, 2}` | `add(x)` | `update([…])` |
+| 딕셔너리 `{'a': 1}` | `d['b'] = 2` | `update({…})` |
+
+- 세트는 순서가 없어서 "맨 뒤에 붙이기(append)"라는 개념이 없다
+- 중괄호 안에 값만 있으면 세트, `:`가 있으면 딕셔너리
 
 ## 5. 문자열 메서드
 
@@ -193,8 +227,13 @@ print([x * x for x in range(5)])               # [0, 1, 4, 9, 16]
 print([x for x in [3, 8, 1, 6] if x > 2])      # [3, 8, 6]
 print([c.upper() for c in "abc"])              # ['A', 'B', 'C']
 ```
+- 조건에 맞는 것을 **끝까지 전부** 모은다 (첫 번째 하나가 아님). 결과는 **리스트**라 print하면 대괄호까지 나온다
+```python
+nums = [5, 12, 8, 20, 3]
+print([n for n in nums if n >= 10])   # [12, 20]
+```
 
-### 예시문제 4번
+### 예제: 값이 x인 키를 모두 찾기
 ```python
 def test(dict, x):
     return [k for k, v in dict.items() if v == x]

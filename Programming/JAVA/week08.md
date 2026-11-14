@@ -114,7 +114,7 @@ System.out.println(a == c);        // false (new는 항상 새 객체)
 System.out.println(a.equals(c));   // true  (String은 equals가 내용 비교로 오버라이딩됨)
 ```
 
-#### `+`로 만든 문자열 (기능사 실기 대비)
+#### `+`로 만든 문자열 (복습 추가)
 ```java
 String a = "hi";
 String d = "h";
@@ -132,7 +132,7 @@ System.out.println(a.equals(e));   // true
 | `d + "i"` | 실행 중 힙에 새 객체 | **false** |
 | `new String("hi")` | 힙에 새 객체 | **false** |
 
-- 공단 예시문제 7번: `new String("ASDF") == new String("ASDF")` → false → `ASDFASDF` 출력
+- 예: `new String("ASDF") == new String("ASDF")` → false → `ASDFASDF` 출력
 - 수정 가능한 문자열: `StringBuilder`, `StringBuffer`(동기화 지원)
 
 ### 주요 메서드 (`s = "Java is fun"`)
@@ -146,6 +146,7 @@ System.out.println(a.equals(e));   // true
 | `s.contains("fun")` | true | 포함 여부 |
 | `"ABC".equalsIgnoreCase("abc")` | true | 대소문자 무시 비교 |
 | `s.replace("a", "o")` | `Jovo is fun` | 해당 문자 **전부** 바꿈 |
+| `"ABC!@#def*&^123".replaceAll("[^a-zA-Z0-9]", "*")` | `ABC***def***123` | **정규식**에 맞는 글자를 전부 바꿈 |
 | `s.substring(8)` | `fun` | 8번부터 끝까지 |
 | `s.substring(0, 4)` | `Java` | 0 ~ **3**번 추출 (끝 번호 **미포함**) |
 | `s.toUpperCase()` | `JAVA IS FUN` | |
@@ -155,9 +156,22 @@ System.out.println(a.equals(e));   // true
 | `String.valueOf(100) + 1` | `1001` | 문자열 연결 |
 | `"Java".compareTo("Kotlin")` | -1 | 사전 순 비교 (같으면 0) |
 
-## 5. 자주 쓰는 라이브러리 (프로그래밍기능사 실기 대비)
+**정규식 `[ ]`과 `[^ ]`** (복습 추가)
 
-> 출제기준의 "라이브러리 활용". 다 외울 필요는 없고 **이름을 보고 뜻이 떠오르면** 충분하다. 모두 직접 실행해 확인
+| 표기 | 뜻 |
+|---|---|
+| `[a-zA-Z0-9]` | 괄호 안의 글자 중 하나 (영문·숫자) |
+| `[^a-zA-Z0-9]` | 괄호 안 맨 앞의 `^` = 괄호 안의 것이 **아닌** 글자 |
+| `ㄱ-ㅎ` `ㅏ-ㅣ` `가-힣` | 한글 자음, 모음, 완성형 한글 |
+
+- `replaceAll("[^ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9,.]", "*")` = 한글·영문·숫자·쉼표·마침표가 **아닌** 글자(특수문자)만 `*`로. 원래 있던 `*`도 한 칸으로 바뀐다
+- `^`를 빼면 정반대(영문·숫자를 가림)가 된다. 실행해 보면 `***!@#****&^***`
+
+**대소문자 철자 규칙**: 클래스는 대문자로 시작(`String`, `System`, `Integer`, `Math`), 메서드는 소문자로 시작하고 이어지는 단어 첫 글자만 대문자(`toUpperCase`, `equalsIgnoreCase`, `indexOf`, `charAt`, `parseInt`). `substring`은 한 단어, `println`은 print + ln(소문자 L)
+
+## 5. 자주 쓰는 라이브러리 (복습 추가)
+
+> 다 외울 필요는 없고 **이름을 보고 뜻이 떠오르면** 충분하다. 모두 직접 실행해 확인
 
 ### 패키지와 import
 | 패키지 | 들어 있는 것 | import |

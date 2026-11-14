@@ -97,7 +97,7 @@ System.out.println(x / 2.0); // 3.5  (int / double → double)
 
 ---
 
-### 기능사 실기 모의고사에서 틀린 것 (2026-11-13): `x++ + ++x`
+### 다시 틀린 것 (2026-11-13): `x++ + ++x`
 ```java
 int x = 3;
 int y = x++ + ++x;

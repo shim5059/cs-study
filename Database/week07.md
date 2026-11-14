@@ -33,9 +33,12 @@ o6      cat     p2     12  2026-04-10
 
 | 분류 | 하는 일 | 명령어 |
 |---|---|---|
-| DDL (정의어) | 표의 **구조**를 만들고 고치고 지움 | `CREATE`, `ALTER`, `DROP` |
+| DDL (정의어) | 표의 **구조**를 만들고 고치고 지움 | `CREATE`, `ALTER`, `DROP`, `TRUNCATE` |
 | DML (조작어) | 표 안의 **데이터**를 다룸 | `SELECT`, `INSERT`, `UPDATE`, `DELETE` |
 | DCL (제어어) | 권한 관리 | `GRANT`, `REVOKE` |
+| TCL (트랜잭션 제어) | 작업 확정·취소 | `COMMIT`, `ROLLBACK` |
+
+- **SELECT도 DML**: 조회도 데이터를 다루는 일이다. DML = 조회·추가·수정·삭제 4개 세트 (책에 따라 SELECT만 DQL로 따로 떼기도 한다)
 
 ## 2. CREATE TABLE과 제약조건
 
@@ -81,6 +84,18 @@ CREATE TABLE 주문 (
 - 주문이 있는 고객 `cat` 삭제 (NO ACTION) → 거부
 - `주문고객`을 NULL로 주문 삽입 → **성공** (외래키는 NULL 가능)
 - 재고량을 −5로 수정 → `CHECK constraint failed`
+
+**CHECK + IN**: 나열한 값 중 하나만 허용
+```sql
+CREATE TABLE 회원 (
+  회원코드 NUMBER NOT NULL,
+  성명 CHAR(10) UNIQUE,
+  등급 CHAR(10) CHECK (등급 IN ('일반', '우수', 'VIP', '골드')),
+  적립금 NUMBER
+);
+```
+- `'VIP'` 삽입 → 저장됨, `'브론즈'` 삽입 → `CHECK constraint failed` (sqlite로 확인)
+- "값 목록에 속하는지" = `IN`. WHERE의 `IN`과 같은 연산자
 - `ON DELETE CASCADE`로 만든 학생 표에서 학과 d1 삭제 → d1 학생 2명도 같이 삭제
 - `UNIQUE` 열에 NULL 두 번 삽입 → 성공
 
@@ -100,13 +115,17 @@ DROP TABLE 배송업체;                              -- 표 자체를 삭제
 | `TRUNCATE TABLE 표` | 데이터 **전부**, 표는 남음 | DDL (되돌릴 수 없음) |
 | `DROP TABLE 표` | 표 **구조까지** 통째로 | DDL |
 
-**DROP의 CASCADE / RESTRICT** (프로그래밍기능사 실기 대비, 공단 예시문제 10번)
+- 그릇으로 비유하면: DELETE는 몇 숟가락 덜기, TRUNCATE는 그릇은 두고 내용물만 싹 비우기, DROP은 그릇까지 버리기
+- TRUNCATE는 trunk(나무 몸통)와 뿌리가 같은 말이다. 몸통(구조)만 남기고 가지·잎(행)을 다 잘라낸다. 철자는 TRUN + CATE
+
+**DROP의 CASCADE / RESTRICT**
 
 | 명령 | 뜻 |
 |---|---|
 | `DROP TABLE test CASCADE;` | test를 지우고, test를 **참조하는 제약조건까지 연쇄 삭제** |
 | `DROP TABLE test RESTRICT;` | test를 참조하는 것이 있으면 **삭제 거부** |
 
+- 문장 단서: 거부·취소·제한 → `RESTRICT`, 함께·연쇄·연관된 것까지 → `CASCADE`
 - 외래키의 `ON DELETE CASCADE`(부모 **행** 삭제 시 자식 행 삭제)와 이름은 같지만 대상이 다르다
 - `ALTER TABLE 고객 MODIFY 고객이름 VARCHAR(30);` → 이미 있는 열의 **타입 변경** (MySQL·Oracle 문법)
 - 열을 추가·삭제·변경하는 건 `ALTER` (구조), 값을 바꾸는 건 `UPDATE` (데이터)
@@ -166,7 +185,7 @@ SELECT 고객이름 FROM 고객 WHERE 나이 IS NULL;   -- 박도윤
 SELECT 고객이름 FROM 고객 WHERE 나이 = NULL;    -- 결과 0행 (= 로는 NULL을 못 찾음)
 ```
 
-### 추가 연산자와 NULL 비교 (프로그래밍기능사 실기 대비)
+### 추가 연산자와 NULL 비교
 
 | 조건 | 뜻 | 결과 |
 |---|---|---|
@@ -253,7 +272,14 @@ FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
 ```
 그래서 `SELECT`에서 만든 별명은 `ORDER BY`에서 쓸 수 있다.
 
-### 문장 → GROUP BY 쿼리로 바꾸는 4단계 (프로그래밍기능사 실기 대비)
+반대로 `HAVING`은 `SELECT`보다 **먼저** 실행되니 별명을 쓰지 말고 집계 함수를 그대로 쓴다.
+```sql
+SELECT 고객, COUNT(*) FROM 주문 GROUP BY 고객 HAVING COUNT(*) >= 2;   -- O
+SELECT 고객, COUNT(*) FROM 주문 GROUP BY 고객 HAVING 주문건수 >= 2;   -- no such column: 주문건수
+```
+- 외우기: 작성 순서에서 `SELECT`만 빼서 `ORDER BY` 바로 앞으로 옮기면 실행 순서
+
+### 문장 → GROUP BY 쿼리로 바꾸는 4단계
 
 | 질문 | 문제 속 단서 | SQL |
 |---|---|---|
@@ -324,6 +350,32 @@ FROM 고객 LEFT OUTER JOIN 주문 ON 고객.고객아이디 = 주문.주문고�
 박도윤 NULL / 최지호 NULL      ← 주문이 없는 고객도 나옴
 ```
 
+### 조인 조건 쓰는 법: ON · USING · NATURAL JOIN
+
+```
+emp: (1, 김, 10) (2, 이, 20) (3, 박, NULL)      dept: (10, 영업) (20, 개발)
+```
+| 방식 | SQL | 결과 |
+|---|---|---|
+| `ON 조건식` | `FROM emp e JOIN dept d ON e.dept_id = d.dept_id` | 김 영업 / 이 개발 |
+| `USING (열)` | `FROM emp JOIN dept USING (dept_id)` | 김 영업 / 이 개발 |
+| `NATURAL JOIN` | `FROM emp NATURAL JOIN dept` | 김 영업 / 이 개발 |
+| `LEFT JOIN … ON` | `FROM emp e LEFT JOIN dept d ON e.dept_id = d.dept_id` | 김 영업 / 이 개발 / **박 NULL** |
+
+- `USING`은 두 표의 열 **이름이 같을 때만**. 괄호 안에 열 이름만 쓴다
+- `NATURAL JOIN`은 이름이 같은 열을 **알아서 전부** 찾아 조인한다 (열 이름을 안 씀)
+- 박의 dept_id는 NULL이라 어떤 값과도 같지 않다 → INNER 조인에선 빠지고, LEFT 조인에선 dname이 NULL로 나온다
+- 구별: 빈칸 뒤가 조건식이면 `ON`, `(열 이름)`이면 `USING`
+
+**UPDATE에 JOIN 붙이기** (MySQL 문법, sqlite 미지원이라 실행 확인 못 함)
+```sql
+UPDATE 판매 a INNER JOIN 목표 b
+ON a.ID = b.ID
+SET a.수량 = b.수량
+WHERE b.매출액 > 8000;
+```
+- `판매 a`처럼 표 이름 뒤에 붙인 짧은 이름은 **표 별칭** (`AS` 생략)
+
 **조인 + 그룹 + 정렬** (고객별 총주문수량, 많은 순)
 ```sql
 SELECT   고객.고객이름, SUM(주문.수량) AS "총주문수량"
@@ -338,7 +390,7 @@ ORDER BY "총주문수량" DESC;
 김하은 | 15
 ```
 
-### 집합연산자: 결과를 위아래로 합치기 (프로그래밍기능사 실기 대비)
+### 집합연산자: 결과를 위아래로 합치기
 
 | 연산자 | 뜻 | 관계 대수 |
 |---|---|---|
@@ -397,7 +449,7 @@ WHERE EXISTS (SELECT * FROM 주문
 - 부속 질의문 안에는 `ORDER BY`를 쓰지 않는다
 - 해석 요령: "~한 고객의 이름" → 바깥 = 고객, 괄호 안 = "~한" 조건을 가진 표
 
-**공단 예시문제 11번 (프로그래밍기능사 실기)**
+**예제: NOT IN 서브쿼리 결과 계산**
 ```
 t1: (A,5) (D,2) (F,3) (G,1)        t2: (A,3) (C,7) (D,6) (H,2)
 ```
@@ -440,7 +492,7 @@ SELECT * FROM 우수고객;
 - 뷰 정의는 `ALTER`로 못 바꾼다 → `DROP VIEW` 후 다시 `CREATE VIEW`
 - 틀: `CREATE VIEW 이름 AS` 뒤에 **SELECT문이 통째로** 온다 (조건만 쓰면 안 됨)
 
-## 12-1. 인덱스와 데이터 사전 조회 (프로그래밍기능사 실기 출제기준)
+## 12-1. 인덱스와 데이터 사전 조회
 
 **인덱스** = 검색을 빠르게 하는 색인 (책 뒤의 찾아보기)
 
@@ -454,6 +506,24 @@ DROP INDEX idx_등급;
 | 검색(SELECT)이 빨라짐 | 저장 공간 추가, **삽입·수정·삭제가 느려짐** (색인도 같이 고쳐야 함) |
 
 - 기본키에는 DBMS가 자동으로 인덱스를 만든다
+
+**여러 열 · 정렬 방향 지정**
+```sql
+CREATE INDEX idx_emp ON Emp(name, dept DESC, age);   -- name 오름차순, dept 내림차순, age 오름차순
+```
+- `ON` = 어느 표의 어느 열에 만들지. `ASC`는 기본값이라 생략
+
+**인덱스 재구성**: 삽입·수정·삭제가 반복되면 인덱스가 조각나(단편화) 느려진다 → 다시 순서대로 정리
+```sql
+ALTER INDEX Idx_Member REBUILD;    -- Oracle·SQL Server 문법 (sqlite 미지원)
+```
+| 하는 일 | SQL |
+|---|---|
+| 만들기 | `CREATE INDEX 이름 ON 표(열);` |
+| 재구성 | `ALTER INDEX 이름 REBUILD;` (RE + BUILD = 다시 짓다) |
+| 삭제 | `DROP INDEX 이름;` |
+
+SQL에서 `ON`은 늘 "어디에 대해": `CREATE INDEX 이름 ON 표(열)`, `GRANT 권한 ON 표 TO 사용자`, `A JOIN B ON 조건`
 
 **데이터 사전(시스템 카탈로그) 조회** — 1주차 개념: DBMS가 자동 관리, 사용자는 **읽기(SELECT)만**
 

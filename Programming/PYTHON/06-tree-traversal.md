@@ -65,7 +65,7 @@ def preorder(r):           # 전위: 나 → 왼 → 오
         preorder(r.left)
         preorder(r.right)
 
-def inorder(r):            # 중위: 왼 → 나 → 오  (예시문제 3번)
+def inorder(r):            # 중위: 왼 → 나 → 오
     if r:
         inorder(r.left)
         print(r.key, end="/")

@@ -37,7 +37,7 @@ switch (n) {
 - **폴스루**: `break`가 없으면 맞는 case부터 **아래로 계속** 실행 (모든 case가 실행되는 것이 아님)
 - `case` 뒤에는 **값**만 올 수 있음 (String도 가능: `case "A":`)
 
-#### default가 위에 있어도 같은 규칙 (기능사 실기 대비)
+#### default가 위에 있어도 같은 규칙 (복습 추가)
 ```java
 int m = 9, t = 0;
 switch (m) {
@@ -48,6 +48,22 @@ switch (m) {
 System.out.println(t);        // 13
 ```
 - default는 위치와 상관없이 "맞는 게 없을 때 들어가는 **입구**"일 뿐, 들어간 뒤엔 똑같이 아래로 흐름
+
+#### default는 항상 실행되지 않는다 (복습 추가)
+```java
+switch (x) {
+    case 1: System.out.println("one"); break;
+    case 2: System.out.println("two"); break;
+    default: System.out.println("other");
+}
+```
+| 상황 | 출력 |
+|---|---|
+| x = 2 (case 2에 break 있음) | `two` |
+| x = 5 (맞는 case 없음) | `other` |
+| x = 2인데 case 2에 break가 없다면 | `two` 다음 줄 `other` |
+
+- default가 실행되는 건 ① 맞는 case가 없을 때 ② 위에서 break 없이 내려왔을 때, 두 경우뿐 (세 경우 모두 실행 확인)
 
 #### 반복문 안의 switch: break는 switch만 빠져나감
 ```java
@@ -66,6 +82,22 @@ System.out.println(s);                // 121 (for는 끝까지 돈다)
 ```java
 int max = (a > b) ? a : b;
 ```
+- 결과는 true/false가 아니라 **값**: 조건이 참이면 앞 값, 거짓이면 뒤 값. `if`를 한 줄로 줄인 것
+
+#### 삼항 + 증감 연산자 (복습 추가)
+```java
+int result, a = 25, b = 75, c = 300;
+result = a < b ? b++ : --c;
+System.out.printf("%d, %d, %d\n", result, b, c);   // 75, 76, 300
+```
+| 순서 | 일어나는 일 |
+|---|---|
+| 1 | `25 < 75` 참 → `b++` 쪽만 실행 |
+| 2 | 후위 `b++`: 지금 값 75를 result에 넣고, 그다음 b = 76 |
+| 3 | `--c`는 **실행조차 안 됨** → c = 300 그대로 |
+| 4 | 서식 `"%d, %d, %d"` → 숫자 사이 쉼표와 공백까지 출력 |
+
+- `result`는 선언만 했지 0이 아니다. main 안의 지역 변수는 기본값이 없다 (기본값 0은 배열 칸과 필드만)
 
 ## 2. 반복문
 
@@ -97,7 +129,28 @@ for (int i = 0; i < 5; i++) {
 }
 ```
 
-### 레이블 break / continue (기능사 실기 대비)
+#### do-while과 출력 위치 (복습 추가)
+```java
+int a[] = {9, 8, 7, 6, 5};
+int i = 4, sum = 0;
+do {
+    a[i] = a[i] % 4;
+    sum = sum + a[i];
+    i--;
+} while (i > 0);
+System.out.printf("%d", sum);   // 6
+```
+| 회차 | i | `a[i] % 4` | sum | `i > 0`? |
+|---|---|---|---|---|
+| 1 | 4 | 5 % 4 = 1 | 1 | 3 > 0 반복 |
+| 2 | 3 | 6 % 4 = 2 | 3 | 2 > 0 반복 |
+| 3 | 2 | 7 % 4 = 3 | 6 | 1 > 0 반복 |
+| 4 | 1 | 8 % 4 = 0 | 6 | 0 > 0 **종료** |
+
+- printf는 반복문 `}` **밖**이라 마지막 sum 한 번만 출력
+- i = 0일 때는 조건이 거짓이라 a[0]은 계산에 안 들어간다
+
+### 레이블 break / continue (복습 추가)
 ```java
 outer:
 for (int i = 0; i < 3; i++) {

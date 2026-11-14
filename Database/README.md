@@ -6,12 +6,13 @@
 - 실습 환경: MySQL Workbench, Python(pymysql, pandas, Streamlit)
 - 예제 데이터는 모두 직접 만든 것이고, SQL 결과는 sqlite로 실행해 확인했다 (MySQL 전용 문장은 파일 안에 따로 표시)
 
-프로그래밍기능사 실기(2026-11-14) 대비로 SQL을 다시 공부하면서, 실기 출제기준(집합연산자, 인덱스, 데이터 사전 조회 등)과 실기 문제 유형을 7·8주차에 덧붙였다. 덧붙인 부분은 **(프로그래밍기능사 실기 대비)**로 표시했다.
+수업 뒤에 SQL을 다시 복습하면서 수업에서 짧게 지나간 내용(집합연산자, 인덱스, 데이터 사전 조회, 조인 조건 등)을 해당 주차에 덧붙였다.
 
 | 주차 | 덧붙인 내용 |
 |---|---|
-| 7주차 | TRUNCATE·DROP CASCADE, BETWEEN·IN·NULL 비교·AND/OR 우선순위, GROUP BY 4단계, 집합연산자, 공단 예시문제 11번, 인덱스·데이터 사전 조회 (+ deep-dive 5건) |
+| 7주차 | SQL 분류(TCL, SELECT=DML), CHECK + IN, TRUNCATE·DROP CASCADE/RESTRICT, BETWEEN·IN·NULL 비교·AND/OR 우선순위, HAVING에서 별칭 금지, GROUP BY 4단계, 조인 조건(ON·USING·NATURAL), UPDATE+JOIN, 집합연산자, NOT IN 예제, 인덱스 만들기·재구성(REBUILD)·데이터 사전 조회 (+ deep-dive) |
 | 8주차 | COMMIT·ROLLBACK을 SQL만으로 추적하기 |
+| 9주차 | REVOKE 순서 (deep-dive) |
 
 각 주차는 두 파일로 나뉜다.
 - `weekNN.md`: 개념 요약

@@ -90,6 +90,24 @@ py -m streamlit run db_streamlit.py → 웹 서버를 켜고 localhost:8501 에�
 
 ---
 
+## REVOKE 순서를 섞었다 (2026-11-14)
+
+### 처음 생각 (오답)
+"user1에게 부여했던 student 테이블의 SELECT 권한을 회수" → `REVOKE user1 FROM student SELECT`
+
+### 원리
+순서는 **무엇을(권한) → 어디에 대해(ON 표) → 누구에게서(FROM 사용자)** 하나뿐이다.
+```sql
+REVOKE SELECT ON student FROM user1;
+GRANT  SELECT ON student TO   user1;   -- 앞부분은 같고 마지막 전치사만 다름
+```
+영어 문장처럼 읽는다: "revoke select on student from user1"
+
+### 깨달음
+REVOKE와 FROM은 기억했는데 자리를 몰랐다. `권한 ON 표`까지는 GRANT와 REVOKE가 똑같다.
+
+---
+
 ## 정리
 
 | 착각 | 바로잡은 규칙 |
@@ -98,3 +116,4 @@ py -m streamlit run db_streamlit.py → 웹 서버를 켜고 localhost:8501 에�
 | 고친 뒤 전체 실행 | 이미 성공한 CREATE USER가 1396 → **한 줄씩 실행** / `IF NOT EXISTS` |
 | "조회 + 추가"가 뭔지 모름 | 권한 이름 = DML 이름, **테이블마다 따로** |
 | `pip`, ▶ 버튼으로 Streamlit | `py -m pip`, `py -m streamlit run` |
+| REVOKE 순서를 섞음 | `REVOKE 권한 ON 표 FROM 사용자` (GRANT와 같은 순서, TO ↔ FROM만 다름) |

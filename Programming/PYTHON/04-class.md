@@ -141,6 +141,38 @@ c = C3(); print(" |", c.v)   # CP | 1   ← 부모가 같은 칸을 1로 덮어�
 d = C4(); print(" |", d.v)   # P | 1
 ```
 
+### 부모 메서드까지 부르는 경우 (복습 추가)
+```python
+class A:
+    def __init__(self):
+        print("A생성")
+        self.x = 1
+    def show(self):
+        print("A.show", self.x)
+
+class B(A):
+    def __init__(self):
+        print("B생성 시작")
+        super().__init__()     # 이 줄에서 A의 __init__ 실행
+        self.x = 2             # 같은 객체의 x를 2로 덮어씀
+        print("B생성 끝")
+    def show(self):
+        print("B.show", self.x)
+        super().show()         # A의 show, self는 같은 객체
+
+b = B()
+b.show()
+```
+```
+B생성 시작
+A생성
+B생성 끝
+B.show 2
+A.show 2
+```
+- 메서드는 실제 객체의 클래스(B)부터 찾고, 없으면 부모(A)에서 찾는다
+- `self`는 객체 하나라 A의 show에서도 x는 2
+
 ## 6. 객체마다 칸이 따로, 변경은 남는다
 
 ```python
@@ -174,7 +206,7 @@ n = p.put("C")
 print(n, p.items, q.items)       # 2 ['A', 'C'] ['B']
 ```
 
-## 7. 시험에 나올 오류 두 가지
+## 7. 자주 나는 오류 두 가지
 
 | 실수 | 결과 |
 |---|---|

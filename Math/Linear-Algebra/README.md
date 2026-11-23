@@ -5,7 +5,7 @@
 - 교재: 『기초 선형대수학』(2판, 한빛아카데미) / 부교재: 『개발자를 위한 실전 선형대수학』
 - 실습 환경: Python (NumPy, SymPy), Google Colab
 - `code/`의 검산 코드는 NumPy와 파이썬 기본 `fractions` 모듈만 써서 직접 구현했고, 모두 실행해서 교안 답과 맞는지 확인했다
-- 인공지능기초II의 수학 파트(벡터·거리·미분·다변수함수)가 많이 겹쳐서 이 폴더에 합쳤다. 표에서 **AI** 표시가 붙은 주차가 그 내용이다
+- 인공지능기초II의 수학 파트(벡터·거리·미분·다변수함수)가 많이 겹쳐서 이 폴더에 합쳤다. 표에서 **AI** 표시가 붙은 주차가 그 내용이다. 선형대수 수업과 주차 번호가 겹치면 파일 이름 끝에 `-ai`를 붙였다 (예: `week10.md`는 선형대수, `week10-ai.md`는 인공지능기초II)
 
 각 주차는 두 파일로 나뉜다.
 - `weekNN.md`: 개념 요약
@@ -25,7 +25,9 @@
 | — | 중간고사 (퀴즈 1·2 범위 = 2~6주차) · 퀴즈 문제에서 출제, 증명 포함 → [증명 모음](proofs.md) | | |
 | [8주차](week08.md) **AI** | 극한·연속·미분계수, 미분법(곱·몫·삼각·지수), 시그모이드 $\sigma' = \sigma(1-\sigma)$, 고계도함수, 연쇄법칙, SymPy | 인공지능기초II 6~7주차 | [deep-dive](week08-deep-dive.md) |
 | [9주차](week09.md) | 벡터공간, 부분공간 3조건, 영공간·열공간, span, 일차독립·종속 | 4.1~4.3 | [deep-dive](week09-deep-dive.md) |
-| [10주차](week10.md) **AI** | 함수의 정의, 이변수함수·곱집합, 그래프와 등위곡선, 좌·우극한과 연속, ε-δ, 이변수 극한(경로 판정), 편도함수, 클레로 정리 | 인공지능기초II 9주차 | [deep-dive](week10-deep-dive.md) |
+| [10주차](week10.md) | 기저·좌표벡터, 차원, 랭크-퇴화차수 정리, 정규직교기저, 직교행렬, 그람-슈미트, QR 분해 | 4.3~4.5 | [deep-dive](week10-deep-dive.md) |
+| [10주차](week10-ai.md) **AI** | 함수의 정의, 이변수함수·곱집합, 그래프와 등위곡선, 좌·우극한과 연속, ε-δ, 이변수 극한(경로 판정), 편도함수, 클레로 정리 | 인공지능기초II 9주차 | [deep-dive](week10-ai-deep-dive.md) |
+| [11주차](week11-ai.md) **AI** | 정사영·코시-슈바르츠·점과 평면 거리, 그레디언트·야코비안·헤시안·라플라시안, 선형변환과 표준행렬 | 인공지능기초II 10주차 | — |
 
 ## PBL 프로젝트 (9~11주차)
 
@@ -43,7 +45,8 @@
 | [week07_vector_applications.py](code/week07_vector_applications.py) | 직선·평면, 코사인 vs 피어슨 비교, 정규방정식 vs `np.linalg.lstsq` |
 | [week08_derivative.py](code/week08_derivative.py) | 중앙차분으로 미분 공식(몫·삼각·연쇄법칙) 검산, 시그모이드 도함수, 삼각함수 극한 |
 | [week09_subspace.py](code/week09_subspace.py) | 영공간·열공간 확인, `matrix_rank`로 일차독립 판정 |
-| [week10_multivariable.py](code/week10_multivariable.py) | 경로별 극한 비교(극한 없음 판정), 편도함수 수치 검산, $f_{xy} = f_{yx}$ 확인 |
+| [week10_basis_gram_schmidt.py](code/week10_basis_gram_schmidt.py) | 좌표벡터, 단위 대입법, rank-nullity, 분수로 하는 그람-슈미트 직교화, QR 분해와 `np.linalg.qr` 부호 비교, QR 최소제곱 |
+| [week10_multivariable.py](code/week10_multivariable.py) **AI** | 경로별 극한 비교(극한 없음 판정), 편도함수 수치 검산, $f_{xy} = f_{yx}$ 확인 |
 
 ```bash
 python3 code/week05_cofactor_cramer.py
@@ -60,6 +63,10 @@ python3 code/week05_cofactor_cramer.py
           │
         외적(수직인 벡터 만들기) ─▶ 평면의 법선 ─▶ 영공간(행벡터와 수직인 벡터들)
 
+span + 일차독립 ─▶ 기저(좌표) ─▶ 차원, rank + nullity = n
+                       │
+정사영(그림자) ─▶ 그람-슈미트 ─▶ 정규직교기저(좌표 = 내적) ─▶ QR 분해 ─▶ 최소제곱 Rx = Qᵀb
+
 극한 ─▶ 미분(선형 연산) ─▶ 편도함수 ─▶ 그래디언트 ─▶ 최소제곱법·경사하강법      (AI 파트)
 ```
 
@@ -73,8 +80,8 @@ python3 code/week05_cofactor_cramer.py
 
 | 분야 | 내용 |
 |---|---|
-| NumPy | `@`(행렬곱) vs `*`(원소곱), `np.linalg.solve` / `inv` / `pinv` / `det` / `matrix_rank` / `lstsq`, `np.dot`, `np.cross`, `np.linalg.norm`, `np.corrcoef` |
-| 직접 구현 | 가우스-조르단 소거법, 역행렬, 상삼각화 행렬식, 재귀 여인수 전개, 크래머 공식 |
+| NumPy | `@`(행렬곱) vs `*`(원소곱), `np.linalg.solve` / `inv` / `pinv` / `det` / `matrix_rank` / `lstsq` / `qr`, `np.dot`, `np.cross`, `np.linalg.norm`, `np.corrcoef` |
+| 직접 구현 | 가우스-조르단 소거법, 역행렬, 상삼각화 행렬식, 재귀 여인수 전개, 크래머 공식, 그람-슈미트 직교화 |
 | 수치 계산 | 부동소수점 오차(`det`가 정확히 0이 안 나옴) → `np.isclose`, `matrix_rank`로 판정, 정확한 값이 필요하면 `fractions.Fraction` |
 | 미분 | 중앙차분 수치 미분으로 공식 검산, SymPy `diff` / `limit` / `subs` / `lambdify` (수업 실습) |
 | 응용 | 코사인 유사도(검색·추천), 피어슨 상관계수, 선형 회귀(최소제곱), 법선벡터(그래픽스), 토크(로보틱스) |
@@ -88,3 +95,7 @@ python3 code/week05_cofactor_cramer.py
 | 묻는 게 벡터인지 숫자인지 안 봄 | 답 쓰기 전에 기호($\lVert\ \rVert$가 있나)로 확인 |
 | 검산을 안 함 | 위의 주제별 검산 방법을 습관으로 |
 | 시험 전에 증명을 건너뜀 → 중간고사에 증명이 많이 나옴 | 퀴즈 증명을 카드로 정리 ([proofs.md](proofs.md)) |
+| 앞 예제의 식 모양(부호)을 그대로 가져옴 | 식은 매번 재료의 성분을 보고 새로 세우고, 원래 식에 넣어 검산 |
+| 기호($v$, $u$, $q$, $w$)가 섞이면 헷갈림 | 계산할 때 벡터마다 "재료 / 남은 조각 / 완성품" 이름표를 붙인다 |
+| 같은 내용의 공식 두 버전을 섞음 | 기준 벡터의 길이가 1인지($q$) 아닌지($w$) 먼저 확인 |
+| 풀이 슬라이드를 바로 봄 | 보기 전에 "어떻게 이해했나 / 어떻게 풀까 / 모르는 단어" 세 줄 적기 (교수님 권장) |

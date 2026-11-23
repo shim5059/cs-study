@@ -2,7 +2,7 @@
 
 > 헷갈렸던 부분과 해결 과정: [week09-deep-dive.md](week09-deep-dive.md)
 
-> 교재 4.1~4.3 · 코드: [code/week09_subspace.py](code/week09_subspace.py) · 수업 강조: 부분공간 3조건 판정, 영공간 예제는 교안 부록 풀이를 따라 해볼 것, 선형대수 수업의 기저·차원으로 이어짐
+> 교재 4.1~4.3 · 코드: [code/week09_subspace.py](code/week09_subspace.py) · 수업 강조: 부분공간 3조건 판정, 영공간 예제는 교안 부록 풀이를 따라 해볼 것, [10주차](week10.md) 기저·차원으로 이어짐
 
 ## 1. 벡터공간 (Vector Space)
 
@@ -196,7 +196,7 @@ $$\det\begin{pmatrix}1&1&0\\1&0&1\\0&-1&1\end{pmatrix} = 1(0 + 1) - 1(1 - 0) + 0
 
 $$\text{rank}(A) + \dim N(A) = n\ (\text{열 개수})\qquad \text{예제 2-2A: } 1 + 2 = 3$$
 
-"반응하는 입력 방향(rank) + 반응 안 하는 방향(영공간) = 입력 방향 전부". 10주차의 차원 정리(Rank-Nullity)로 이어진다.
+"반응하는 입력 방향(rank) + 반응 안 하는 방향(영공간) = 입력 방향 전부". 10주차의 차원 정리(Rank-Nullity)로 이어진다 → [week10.md](week10.md)
 
 ## 9. 파이썬 확인 (NumPy)
 

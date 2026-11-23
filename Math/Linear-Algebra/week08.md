@@ -2,7 +2,7 @@
 
 > 헷갈렸던 부분과 해결 과정: [week08-deep-dive.md](week08-deep-dive.md)
 
-> 선형대수는 중간고사 주간 · 이 파일은 인공지능기초II 6~7주차(미분) 내용을 합친 것 · 코드: [code/week08_derivative.py](code/week08_derivative.py) · 이어지는 내용: [10주차](week10.md) 편도함수
+> 선형대수는 중간고사 주간 · 이 파일은 인공지능기초II 6~7주차(미분) 내용을 합친 것 · 코드: [code/week08_derivative.py](code/week08_derivative.py) · 이어지는 내용: [10주차 AI](week10-ai.md) 편도함수
 
 ## 1. 극한 · 연속 · 미분가능
 

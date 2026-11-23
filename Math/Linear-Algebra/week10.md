@@ -319,4 +319,4 @@ print(np.allclose(Q.T @ Q, np.eye(3)), np.allclose(Q @ R, A))         # True Tru
 
 - 11주차: 선형변환, 표준행렬, 핵(Kernel)·상(Image). $L(x) = Ax$의 핵은 영공간 $N(A)$, 상은 열공간 $C(A)$라서 9~10주차의 연장이다
 - 표준행렬의 열 = 표준기저 벡터가 옮겨지는 곳 → 기저가 어디로 가는지만 알면 변환 전체가 정해진다
-- 인공지능기초2(11/17)에서 선형변환의 정의와 표준행렬을 먼저 배웠다 → [ai2-linear-algebra.md](ai2-linear-algebra.md) 5절
+- 인공지능기초II 10주차(11/17)에서 선형변환의 정의와 표준행렬을 먼저 배웠다 → [11주차 AI](week11-ai.md) 5절

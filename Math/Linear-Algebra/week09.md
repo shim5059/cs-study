@@ -2,7 +2,7 @@
 
 > 헷갈렸던 부분과 해결 과정: [week09-deep-dive.md](week09-deep-dive.md)
 
-> 교재 4.1~4.3 · 코드: [code/week09_subspace.py](code/week09_subspace.py) · 수업 강조: 부분공간 3조건 판정, 영공간 예제는 교안 부록 풀이를 따라 해볼 것, 10주차 기저·차원으로 이어짐
+> 교재 4.1~4.3 · 코드: [code/week09_subspace.py](code/week09_subspace.py) · 수업 강조: 부분공간 3조건 판정, 영공간 예제는 교안 부록 풀이를 따라 해볼 것, [10주차](week10.md) 기저·차원으로 이어짐
 
 ## 1. 벡터공간 (Vector Space)
 
@@ -226,3 +226,4 @@ print(np.linalg.matrix_rank(B))   # 1 → dim N(B) = 3 - 1 = 2
 - 2인 1조, 역할: 수학 모델링 / 파이썬 코딩, 서로의 영역을 교차 검증
 - 10개 주제 중 1개 선택, 매주 팀 회의록, 최종 보고서 + 코드 제출
 - 교수님 조언: 보고서 양식을 1주차부터 보면서 조금씩 채우고, 회의는 수업 끝나고 바로 잠깐 해도 됨
+- 진행 기록: [PBL-Project](PBL-Project)

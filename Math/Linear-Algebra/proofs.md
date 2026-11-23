@@ -37,7 +37,7 @@
 | 11. 0 아닌 직교 집합은 일차독립 | 양변에 $u_i$ 내적, 길이 ≠ 0 | E |
 | 12. $(Qx) \cdot (Qy) = x \cdot y$ | 내적을 $x^Ty$로, $Q^TQ = I$ | C |
 | 13. 그람-슈미트 남은 조각 $u_k \perp q_i$ | $q_i$ 내적, $\delta_{ij}$로 한 항만 남음 | E |
-| 14. 코시-슈바르츠 $\lvert x \cdot y \rvert \le \lVert x \rVert \lVert y \rVert$ (인공지능기초2에서도 나옴) | $\lVert x - ty \rVert^2 \ge 0$, 판별식 | F |
+| 14. 코시-슈바르츠 $\lvert x \cdot y \rvert \le \lVert x \rVert \lVert y \rVert$ (인공지능기초II에서도 나옴) | $\lVert x - ty \rVert^2 \ge 0$, 판별식 | F |
 
 ---
 
@@ -242,7 +242,7 @@
 
 ---
 
-## 14. 코시-슈바르츠 부등식 (인공지능기초2에서도 나옴)
+## 14. 코시-슈바르츠 부등식 (인공지능기초II에서도 나옴)
 
 **무엇을 보이나**: 모든 벡터 $x$, $y$에 대해 $\lvert x \cdot y \rvert \le \lVert x \rVert \lVert y \rVert$
 

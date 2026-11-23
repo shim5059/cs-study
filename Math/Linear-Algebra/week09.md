@@ -2,7 +2,7 @@
 
 > 헷갈렸던 부분과 해결 과정: [week09-deep-dive.md](week09-deep-dive.md)
 
-> 교재 4.1~4.3 · 코드: [code/week09_subspace.py](code/week09_subspace.py) · 수업 강조: 부분공간 3조건 판정, 영공간 예제는 교안 부록 풀이를 따라 해볼 것, 10주차 기저·차원으로 이어짐
+> 교재 4.1~4.3 · 코드: [code/week09_subspace.py](code/week09_subspace.py) · 수업 강조: 부분공간 3조건 판정, 영공간 예제는 교안 부록 풀이를 따라 해볼 것, 선형대수 수업의 기저·차원으로 이어짐
 
 ## 1. 벡터공간 (Vector Space)
 

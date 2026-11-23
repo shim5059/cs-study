@@ -21,3 +21,5 @@
 | [6주차](week06.md) | TCP 헤더, 3-way/4-way 핸드셰이크, Seq/ACK·재전송, 흐름 제어(rwnd)·혼잡 제어(cwnd) | 3장 | [deep-dive](week06-deep-dive.md) |
 | — | 중간고사 (1~3장, 서술형: OSI·TCP/IP 계층과 PDU, TCP 연결·전송 과정, UDP 특징, HTTP 버전별 차이) | | |
 | [7주차](week07.md) | 네트워크 계층(포워딩/라우팅), IPv4 헤더·TTL·ICMP, MTU·단편화, 서브넷 계산·CIDR·VLSM, LPM, ARP·DHCP·NAT | 4장 | [deep-dive](week07-deep-dive.md) |
+| [8주차](week08.md) | 패킷트레이서 ping 흐름(ARP 브로드캐스트/유니캐스트, ARP 테이블), PDU 캡슐화, 홉마다 바뀌는 MAC, STP·CDP·DTP, ipconfig·오류 문구 | 4장 실습 | [deep-dive](week08-deep-dive.md) |
+| [9주차](week09.md) | 라우터 2대 스태틱 라우팅, MAC·이더넷 프레임, CRC/FCS·ARQ, 허브/스위치·충돌/브로드캐스트 도메인, STP, CSMA/CD·CA, VLAN·802.1Q·트렁킹, PoE·VXLAN | 4장 실습·5장 | [deep-dive](week09-deep-dive.md) |

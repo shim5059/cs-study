@@ -23,6 +23,9 @@
 | [7주차](week07.md) | 공간의 직선·평면, 코사인 유사도, 피어슨 상관계수, 최소제곱법·정규방정식 | 3.3~3.4 | [deep-dive](week07-deep-dive.md) |
 | — | 중간고사 (퀴즈 1·2 범위 = 2~6주차) · 퀴즈 문제에서 출제, 증명 포함 → [증명 모음](proofs.md) | | |
 | [9주차](week09.md) | 벡터공간, 부분공간 3조건, 영공간·열공간, span, 일차독립·종속 | 4.1~4.3 | [deep-dive](week09-deep-dive.md) |
+| [10주차](week10.md) | 기저·좌표벡터, 차원, 랭크-퇴화차수 정리, 정규직교기저, 직교행렬, 그람-슈미트, QR 분해 | 4.3~4.5 | [deep-dive](week10-deep-dive.md) |
+
+함께 보기: [인공지능기초2에서 나온 선형대수](ai2-linear-algebra.md) (정사영·코시-슈바르츠·점과 평면 거리·헤시안·선형변환과 표준행렬)
 
 ## 직접 구현한 것
 
@@ -35,6 +38,7 @@
 | [week06_vectors.py](code/week06_vectors.py) | 내적·사잇각·정사영·반사·외적·부피·토크 |
 | [week07_vector_applications.py](code/week07_vector_applications.py) | 직선·평면, 코사인 vs 피어슨 비교, 정규방정식 vs `np.linalg.lstsq` |
 | [week09_subspace.py](code/week09_subspace.py) | 영공간·열공간 확인, `matrix_rank`로 일차독립 판정 |
+| [week10_basis_gram_schmidt.py](code/week10_basis_gram_schmidt.py) | 좌표벡터, 단위 대입법, rank-nullity, 분수로 하는 그람-슈미트 직교화, QR 분해와 `np.linalg.qr` 부호 비교, QR 최소제곱 |
 
 ```bash
 python3 code/week05_cofactor_cramer.py
@@ -50,6 +54,10 @@ python3 code/week05_cofactor_cramer.py
 벡터·내적(수직 = 내적 0) ─▶ 정사영 ─▶ 최소제곱법(해가 없을 때 가장 가까운 답)
           │
         외적(수직인 벡터 만들기) ─▶ 평면의 법선 ─▶ 영공간(행벡터와 수직인 벡터들)
+
+span + 일차독립 ─▶ 기저(좌표) ─▶ 차원, rank + nullity = n
+                       │
+정사영(그림자) ─▶ 그람-슈미트 ─▶ 정규직교기저(좌표 = 내적) ─▶ QR 분해 ─▶ 최소제곱 Rx = Qᵀb
 ```
 
 - "가역이다 = RREF가 $I$ = $Ax = 0$의 해가 0뿐 = $\det \neq 0$ = 열들이 일차독립"이 전부 같은 말이라는 것. 3주차, 4주차, 9주차가 같은 사실을 다른 각도에서 본 것이었다
@@ -61,8 +69,8 @@ python3 code/week05_cofactor_cramer.py
 
 | 분야 | 내용 |
 |---|---|
-| NumPy | `@`(행렬곱) vs `*`(원소곱), `np.linalg.solve` / `inv` / `pinv` / `det` / `matrix_rank` / `lstsq`, `np.dot`, `np.cross`, `np.linalg.norm`, `np.corrcoef` |
-| 직접 구현 | 가우스-조르단 소거법, 역행렬, 상삼각화 행렬식, 재귀 여인수 전개, 크래머 공식 |
+| NumPy | `@`(행렬곱) vs `*`(원소곱), `np.linalg.solve` / `inv` / `pinv` / `det` / `matrix_rank` / `lstsq` / `qr`, `np.dot`, `np.cross`, `np.linalg.norm`, `np.corrcoef` |
+| 직접 구현 | 가우스-조르단 소거법, 역행렬, 상삼각화 행렬식, 재귀 여인수 전개, 크래머 공식, 그람-슈미트 직교화 |
 | 수치 계산 | 부동소수점 오차(`det`가 정확히 0이 안 나옴) → `np.isclose`, `matrix_rank`로 판정, 정확한 값이 필요하면 `fractions.Fraction` |
 | 응용 | 코사인 유사도(검색·추천), 피어슨 상관계수, 선형 회귀(최소제곱), 법선벡터(그래픽스), 토크(로보틱스) |
 
@@ -74,3 +82,7 @@ python3 code/week05_cofactor_cramer.py
 | 묻는 게 벡터인지 숫자인지 안 봄 | 답 쓰기 전에 기호($\lVert\ \rVert$가 있나)로 확인 |
 | 검산을 안 함 | 위의 주제별 검산 방법을 습관으로 |
 | 시험 전에 증명을 건너뜀 → 중간고사에 증명이 많이 나옴 | 퀴즈 증명을 카드로 정리 ([proofs.md](proofs.md)) |
+| 앞 예제의 식 모양(부호)을 그대로 가져옴 | 식은 매번 재료의 성분을 보고 새로 세우고, 원래 식에 넣어 검산 |
+| 기호($v$, $u$, $q$, $w$)가 섞이면 헷갈림 | 계산할 때 벡터마다 "재료 / 남은 조각 / 완성품" 이름표를 붙인다 |
+| 같은 내용의 공식 두 버전을 섞음 | 기준 벡터의 길이가 1인지($q$) 아닌지($w$) 먼저 확인 |
+| 풀이 슬라이드를 바로 봄 | 보기 전에 "어떻게 이해했나 / 어떻게 풀까 / 모르는 단어" 세 줄 적기 (교수님 권장) |

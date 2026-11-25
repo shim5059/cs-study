@@ -16,6 +16,7 @@
 | 6주차 | static은 변수 타입 기준, 필드·static·super가 섞인 다형성 |
 | 7주차 | 생성자 체인(this()·super()), 생성자 안의 오버라이딩 호출, 오버로딩은 덮어쓰지 않음, default 메서드 재정의 (+ deep-dive) |
 | 8주차 | `+`로 만든 String의 `==`, String 메서드 추가, `replaceAll` 정규식 `[^…]`, 대소문자 철자 규칙, 자주 쓰는 라이브러리 (Math, ArrayList, HashMap) |
+| 9주차 | `delete(시작, 끝)`의 끝 번호 규칙, `Math` 반환 타입(`8.0`과 `8`), `ArrayList` 끼우기·지우기 후 번호 (+ deep-dive) |
 
 각 주차는 두 파일로 나뉜다.
 - `weekNN.md`: 개념 요약
@@ -34,3 +35,4 @@
 | — | 중간고사 (3~6장, 추상 클래스 이전까지) | | |
 | [7주차](week07.md) | 추상 클래스, 인터페이스, 캐스팅·생성자 흐름 정리, 배송 시스템 | 6장 | [deep-dive](week07-deep-dive.md) |
 | [8주차](week08.md) | 자바 기본 패키지: 모듈, Object(equals/toString/getClass), Wrapper, String | 9장 | [deep-dive](week08-deep-dive.md) |
+| [9주차](week09.md) | 제네릭 `Box<T>`, ArrayList·LinkedList, StringBuilder, Math 반환 타입 | 7~8장 | [deep-dive](week09-deep-dive.md) |
